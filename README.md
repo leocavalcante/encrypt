@@ -1,4 +1,8 @@
 # encrypt
+
+[![Pub Package](https://img.shields.io/pub/v/encrypt.svg)](https://pub.dartlang.org/packages/encrypt)
+[![Build Status](https://travis-ci.org/leocavalcante/encrypt.svg?branch=master)](https://travis-ci.org/leocavalcante/encrypt)
+
 A set of high-level APIs over PointyCastle for two-way cryptography.
 
 - [x] AES
