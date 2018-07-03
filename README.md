@@ -5,10 +5,9 @@
 
 A set of high-level APIs over PointyCastle for two-way cryptography.
 
-- [x] AES
-- [x] Salsa20
-- [ ] RSA
+> Looking for password hashing? Please, visit [password](https://github.com/leocavalcante/password-dart).
 
+## AES
 ```dart
 import 'package:encrypt/encrypt.dart';
 
