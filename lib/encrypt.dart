@@ -1,6 +1,7 @@
 library encrypt;
 
 export 'src/aes.dart';
+export 'src/salsa20.dart';
 
 abstract class Algorithm {
   String encrypt(String plainText);

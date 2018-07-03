@@ -2,6 +2,7 @@
 A set of high-level APIs over PointyCastle for two-way cryptography.
 
 - [x] AES
+- [x] Salsa20
 - [ ] RSA
 
 ```dart
