@@ -36,11 +36,11 @@ void main() {
 
   final encrypter = new Encrypter(new Salsa20(key, iv));
 
-  final encrypted = encrypter.encrypt(plainText); // c5cc91943cf0
-  final decrypted = encrypter.decrypt(encrypted); // Secret
+  final encrypted = encrypter.encrypt(plainText);
+  final decrypted = encrypter.decrypt(encrypted);
 
-  print(encrypted);
-  print(decrypted);
+  print(encrypted); // c5cc91943cf0
+  print(decrypted); // Secret
 }
 ```
 
