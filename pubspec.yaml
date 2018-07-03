@@ -1,6 +1,11 @@
 name: encrypt
-description: A set of high-level APIs over PointyCastle and CryptoUtils for two-way cryptography.
 version: 0.1.0
+description: A set of high-level APIs over PointyCastle and CryptoUtils for two-way cryptography.
+author: leocavalcante <lc@leocavalcante.com>
+homepage: https://github.com/leocavalcante/encrypt
+
+environment:
+  sdk: ">=2.0.0-dev <2.0.0"
 
 dependencies:
   pointycastle: ^1.0.0-rc2
