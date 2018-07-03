@@ -7,7 +7,7 @@ A set of high-level APIs over PointyCastle for two-way cryptography.
 
 > Looking for password hashing? Please, visit [password](https://github.com/leocavalcante/password-dart).
 
-## AES
+## AES (Block Cipher)
 ```dart
 import 'package:encrypt/encrypt.dart';
 
@@ -24,3 +24,25 @@ void main() {
   print(decryptedText); // Lorem ipsum dolor sit amet, consectetur adipiscing elit ........
 }
 ```
+
+## Salsa20 (Stream Cipher)
+```dart
+import 'package:encrypt/encrypt.dart';
+
+void main() {
+  final key = 'private!!!!!!!!!';
+  final iv = '8bytesiv'; // https://en.wikipedia.org/wiki/Initialization_vector
+  final plainText = 'Secret';
+
+  final encrypter = new Encrypter(new Salsa20(key, iv));
+
+  final encrypted = encrypter.encrypt(plainText); // c5cc91943cf0
+  final decrypted = encrypter.decrypt(encrypted); // Secret
+
+  print(encrypted);
+  print(decrypted);
+}
+```
+
+## RSA (Asymmetric)
+TODO
