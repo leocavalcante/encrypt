@@ -16,7 +16,7 @@ class Salsa20 implements Algorithm {
   final Salsa20Engine _cipher = new Salsa20Engine();
 
   Salsa20(this.key, this.iv)
-      : _params = new ParametersWithIV(
+      : _params = new ParametersWithIV<KeyParameter>(
             new KeyParameter(new Uint8List.fromList(key.codeUnits)),
             new Uint8List.fromList(iv.codeUnits));
 
