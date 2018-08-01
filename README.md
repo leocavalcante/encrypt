@@ -34,14 +34,35 @@ void main() {
   final key = 'private!!!!!!!!!';
   final iv = '8bytesiv'; // https://en.wikipedia.org/wiki/Initialization_vector
   final plainText = 'Secret';
-
+  
   final encrypter = new Encrypter(new Salsa20(key, iv));
 
   final encrypted = encrypter.encrypt(plainText);
   final decrypted = encrypter.decrypt(encrypted);
+  
 
   print(encrypted); // c5cc91943cf0
   print(decrypted); // Secret
+}
+```
+## Salsa20 With Chinese
+```
+import 'package:encrypt/encrypt.dart';
+import 'dart/convert';
+
+void main() {
+    final key = '1234567890123456';
+    final iv = '8bytesiv';
+    final encryptor = Encrypter(Salsa20(key, iv));
+    String text = '你好';
+    String base64Text = base64.encode(utf8.encode(text));
+    String encText  = encryptor.encrypt(base64Text);
+    var decStr = utf8.decode(base64.decode(encryptor.decrypt(encText)));
+
+    print('origin:'+text);//你好
+    print('base64Text:'+base64Text);//5L2g5aW9
+    print('enc text:'+encText);//c72f29fd34b15145
+    print('dec text:'+decStr);//你好
 }
 ```
 
