@@ -45,5 +45,24 @@ void main() {
 }
 ```
 
+## Salsa20 With Chinese
+```dart
+import 'package:encrypt/encrypt.dart';
+
+void main() {
+  final key = '1234567890123456';
+  final iv = '8bytesiv';
+  final encryptor = Encrypter(Salsa20(key, iv));
+  String text = '你好';
+  String base64Text = base64.encode(utf8.encode(text));
+  String encText  = encryptor.encrypt(base64Text);
+  var decStr = utf8.decode(base64.decode(encryptor.decrypt(encText)));
+
+  print('origin:'+text);//你好
+  print('base64Text:'+base64Text);//5L2g5aW9
+  print('enc text:'+encText);//c72f29fd34b15145
+  print('dec text:'+decStr);//你好
+}
+```
 ## RSA (Asymmetric)
 TODO
