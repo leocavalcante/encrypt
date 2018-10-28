@@ -1,0 +1,11 @@
+analyzer:
+  strong-mode:
+    implicit-casts: false
+
+linter:
+  rules:
+    - avoid_empty_else
+    - cancel_subscriptions
+    - close_sinks
+    - unnecessary_const
+    - unnecessary_new
