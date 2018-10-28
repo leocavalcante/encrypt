@@ -3,7 +3,7 @@ import 'package:encrypt/encrypt.dart';
 void main() {
   final key = 'my32lengthsupersecretnooneknows1';
 
-  final encrypter = new Encrypter(new AES(key));
+  final encrypter = Encrypter(AES(key));
   final plainText =
       'Lorem ipsum dolor sit amet, consectetur adipiscing elit ........';
 

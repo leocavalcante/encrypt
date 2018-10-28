@@ -9,17 +9,16 @@ import 'helpers.dart';
 class AES implements Algorithm {
   final String key;
   final KeyParameter _params;
-  final AESFastEngine _cipher = new AESFastEngine();
+  final AESFastEngine _cipher = AESFastEngine();
 
-  AES(this.key)
-      : _params = new KeyParameter(new Uint8List.fromList(key.codeUnits));
+  AES(this.key) : _params = KeyParameter(Uint8List.fromList(key.codeUnits));
 
   String encrypt(String plainText) {
     _cipher
       ..reset()
       ..init(true, _params);
 
-    final input = new Uint8List.fromList(plainText.codeUnits);
+    final input = Uint8List.fromList(plainText.codeUnits);
     final output = _processBlocks(input);
 
     return formatBytesAsHexString(output);
@@ -33,11 +32,11 @@ class AES implements Algorithm {
     final input = createUint8ListFromHexString(cipherText);
     final output = _processBlocks(input);
 
-    return new String.fromCharCodes(output);
+    return String.fromCharCodes(output);
   }
 
   Uint8List _processBlocks(Uint8List input) {
-    var output = new Uint8List(input.lengthInBytes);
+    var output = Uint8List(input.lengthInBytes);
 
     for (int offset = 0; offset < input.lengthInBytes;) {
       offset += _cipher.processBlock(input, offset, output, offset);

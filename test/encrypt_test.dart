@@ -6,7 +6,7 @@ void main() {
   final iv = '8bytesiv';
 
   group('AES', () {
-    final encrypter = new Encrypter(new AES(key));
+    final encrypter = Encrypter(AES(key));
 
     final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit '
         .padRight(64, '.');
@@ -21,7 +21,7 @@ void main() {
   });
 
   group('Salsa20', () {
-    final encrypter = new Encrypter(new Salsa20(key, iv));
+    final encrypter = Encrypter(Salsa20(key, iv));
 
     final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
     final cipherText =

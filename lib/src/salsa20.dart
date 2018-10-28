@@ -11,21 +11,21 @@ import 'helpers.dart';
 class Salsa20 implements Algorithm {
   final String key;
   final String iv;
-  final ParametersWithIV _params;
+  final ParametersWithIV<KeyParameter> _params;
 
-  final Salsa20Engine _cipher = new Salsa20Engine();
+  final Salsa20Engine _cipher = Salsa20Engine();
 
   Salsa20(this.key, this.iv)
-      : _params = new ParametersWithIV<KeyParameter>(
-            new KeyParameter(new Uint8List.fromList(key.codeUnits)),
-            new Uint8List.fromList(iv.codeUnits));
+      : _params = ParametersWithIV<KeyParameter>(
+            KeyParameter(Uint8List.fromList(key.codeUnits)),
+            Uint8List.fromList(iv.codeUnits));
 
   String encrypt(String plainText) {
     _cipher
       ..reset()
       ..init(true, _params);
 
-    final input = new Uint8List.fromList(plainText.codeUnits);
+    final input = Uint8List.fromList(plainText.codeUnits);
     final output = _cipher.process(input);
 
     return formatBytesAsHexString(output);
@@ -39,6 +39,6 @@ class Salsa20 implements Algorithm {
     final input = createUint8ListFromHexString(cipherText);
     final output = _cipher.process(input);
 
-    return new String.fromCharCodes(output);
+    return String.fromCharCodes(output);
   }
 }
