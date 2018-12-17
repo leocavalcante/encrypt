@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 
+/// Converts binary data to a hexdecimal representation.
 String formatBytesAsHexString(Uint8List bytes) {
   var result = StringBuffer();
   for (var i = 0; i < bytes.lengthInBytes; i++) {
@@ -9,6 +10,7 @@ String formatBytesAsHexString(Uint8List bytes) {
   return result.toString();
 }
 
+/// Converts a hexdecimal representation to binary data.
 Uint8List createUint8ListFromHexString(String hex) {
   var result = Uint8List(hex.length ~/ 2);
   for (var i = 0; i < hex.length; i += 2) {

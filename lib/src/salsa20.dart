@@ -8,6 +8,7 @@ import 'dart:typed_data';
 
 import 'helpers.dart';
 
+/// Wraps the Salsa20 Engine.
 class Salsa20 implements Algorithm {
   final String key;
   final String iv;
@@ -20,6 +21,7 @@ class Salsa20 implements Algorithm {
             KeyParameter(Uint8List.fromList(key.codeUnits)),
             Uint8List.fromList(iv.codeUnits));
 
+  @override
   String encrypt(String plainText) {
     _cipher
       ..reset()
@@ -31,6 +33,7 @@ class Salsa20 implements Algorithm {
     return formatBytesAsHexString(output);
   }
 
+  @override
   String decrypt(String cipherText) {
     _cipher
       ..reset()

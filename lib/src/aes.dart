@@ -6,6 +6,7 @@ import 'package:pointycastle/block/aes_fast.dart';
 import '../encrypt.dart';
 import 'helpers.dart';
 
+/// Wraps the AES FastEngine Algorith.
 class AES implements Algorithm {
   final String key;
   final KeyParameter _params;
@@ -13,6 +14,7 @@ class AES implements Algorithm {
 
   AES(this.key) : _params = KeyParameter(Uint8List.fromList(key.codeUnits));
 
+  @override
   String encrypt(String plainText) {
     _cipher
       ..reset()
@@ -24,6 +26,7 @@ class AES implements Algorithm {
     return formatBytesAsHexString(output);
   }
 
+  @override
   String decrypt(String cipherText) {
     _cipher
       ..reset()
