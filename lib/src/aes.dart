@@ -6,7 +6,7 @@ import 'package:pointycastle/block/aes_fast.dart';
 import '../encrypt.dart';
 import 'helpers.dart';
 
-/// Wraps the AES FastEngine Algorith.
+/// Wraps the AES FastEngine Algorithm.
 class AES implements Algorithm {
   final String key;
   final KeyParameter _params;

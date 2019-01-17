@@ -9,6 +9,7 @@ environment:
 
 dependencies:
   pointycastle: ^1.0.0
+  asn1lib: ^0.5.3
 
 dev_dependencies:
   test: ^1.5.1+1
