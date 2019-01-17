@@ -1,5 +1,7 @@
 import 'package:encrypt/encrypt.dart';
+import 'package:pointycastle/asymmetric/api.dart';
 import 'package:test/test.dart';
+import 'dart:io';
 
 void main() {
   final key = 'my32lengthsupersecretnooneknows1';
@@ -31,6 +33,23 @@ void main() {
         () => expect(encrypter.encrypt(plainText), equals(cipherText)));
 
     test('decrypt',
+        () => expect(encrypter.decrypt(cipherText), equals(plainText)));
+  });
+
+  group('RSA', () {
+    final parser = RSAKeyParser();
+
+    final RSAPublicKey publicKey =
+        parser.parse(File('test/public.pem').readAsStringSync());
+    final RSAPrivateKey privateKey =
+        parser.parse(File('test/private.pem').readAsStringSync());
+
+    final encrypter = Encrypter(RSA(publicKey, privateKey));
+
+    final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
+    final cipherText = encrypter.encrypt(plainText);
+
+    test('encrypt',
         () => expect(encrypter.decrypt(cipherText), equals(plainText)));
   });
 }
