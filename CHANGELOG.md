@@ -1,6 +1,8 @@
+# 1.0.1
+* RSA
+
 # 1.0.0
 * Stable and documented API
-
 
 # 0.2.0+2
 * Remove unnecessary `new`s
