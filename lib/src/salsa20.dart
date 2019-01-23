@@ -1,12 +1,9 @@
-import '../encrypt.dart';
-
-import 'package:pointycastle/stream/salsa20.dart';
-
-import 'package:pointycastle/api.dart' show ParametersWithIV, KeyParameter;
-
 import 'dart:typed_data';
 
-import 'helpers.dart';
+import 'package:pointycastle/api.dart' show ParametersWithIV, KeyParameter;
+import 'package:pointycastle/stream/salsa20.dart';
+
+import '../encrypt.dart';
 
 /// Wraps the Salsa20 Engine.
 class Salsa20 implements Algorithm {
@@ -22,26 +19,20 @@ class Salsa20 implements Algorithm {
             Uint8List.fromList(iv.codeUnits));
 
   @override
-  String encrypt(String plainText) {
+  Encrypted encrypt(String text) {
     _cipher
       ..reset()
       ..init(true, _params);
 
-    final input = Uint8List.fromList(plainText.codeUnits);
-    final output = _cipher.process(input);
-
-    return formatBytesAsHexString(output);
+    return Encrypted(_cipher.process(Uint8List.fromList(text.codeUnits)));
   }
 
   @override
-  String decrypt(String cipherText) {
+  String decrypt(Encrypted encrypted) {
     _cipher
       ..reset()
       ..init(false, _params);
 
-    final input = createUint8ListFromHexString(cipherText);
-    final output = _cipher.process(input);
-
-    return String.fromCharCodes(output);
+    return String.fromCharCodes(_cipher.process(encrypted.bytes));
   }
 }

@@ -1,17 +1,16 @@
 import 'package:encrypt/encrypt.dart';
 
 void main() {
-  final key = 'my32lengthsupersecretnooneknows1';
-
+  final key = 'my 32 length key................';
   final encrypter = Encrypter(AES(key));
-  final plainText =
-      'Lorem ipsum dolor sit amet, consectetur adipiscing elit ........';
+  final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
 
-  final encryptedText = encrypter.encrypt(plainText);
-  final decryptedText = encrypter.decrypt(encryptedText);
+  final encrypted = encrypter.encrypt(plainText);
+  final decrypted = encrypter.decrypt(encrypted);
 
-  print(
-      encryptedText); // db066ce180f62f020617eb720b891c1efcc48b217cb83272812a8efe3b30e7eae4373ddcede4ea77bdae77d126d95457b3759b1983bf4cb4a6a5b051a5690bdf
-  print(
-      decryptedText); // Lorem ipsum dolor sit amet, consectetur adipiscing elit ........
+  print(decrypted); // Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  print(encrypted.bytes);
+  print(encrypted.base16);
+  print(encrypted
+      .base64); // FFyykKoJhWA+A23eeE8aUNhOgVBQfhIAHNY1YkO9ztlc9uFMCP+HtiMpc/ZBFVsycHwO6CmpWaVP2qLwpj91gQ==
 }
