@@ -1,39 +1,37 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:encrypt/encrypt.dart';
 import 'package:pointycastle/asymmetric/api.dart';
 import 'package:test/test.dart';
-import 'dart:io';
 
 void main() {
+  final text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
   final key = 'my32lengthsupersecretnooneknows1';
   final iv = '8bytesiv';
 
   group('AES', () {
+    final encoded =
+        'IBMwG6ieh/V/fNn6roa9CLdRmcHZA87XqjxIus92ZcmNMd7kURgARgFmbrvRpmdm9aX3iCT4I1us5GT6VSDVZw==';
+
     final encrypter = Encrypter(AES(key));
+    final encrypted = Encrypted(base64.decode(encoded));
 
-    final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit '
-        .padRight(64, '.');
-    final cipherText =
-        'db066ce180f62f020617eb720b891c1efcc48b217cb83272812a8efe3b30e7eae4373ddcede4ea77bdae77d126d95457b3759b1983bf4cb4a6a5b051a5690bdf';
+    test('encrypt', () => expect(encrypter.encrypt(text), equals(encrypted)));
 
-    test('encrypt',
-        () => expect(encrypter.encrypt(plainText), equals(cipherText)));
-
-    test('decrypt',
-        () => expect(encrypter.decrypt(cipherText), equals(plainText)));
+    test('decrypt', () => expect(encrypter.decrypt(encrypted), equals(text)));
   });
 
   group('Salsa20', () {
+    final encoded =
+        'XY2uJh1aK1lgWVqUgPGBVr+tXzbAfAWuWaRocNnLEwXSUCo7NfP8HRl3wke+51QAaO+neShBYQ==';
+
     final encrypter = Encrypter(Salsa20(key, iv));
+    final encrypted = Encrypted(base64.decode(encoded));
 
-    final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
-    final cipherText =
-        '5d8dae261d5a2b5960595a9480f18156bfad5f36c07c05ae59a46870d9cb1305d2502a3b35f3fc1d1977c247bee7540068efa779284161';
+    test('encrypt', () => expect(encrypter.encrypt(text), equals(encrypted)));
 
-    test('encrypt',
-        () => expect(encrypter.encrypt(plainText), equals(cipherText)));
-
-    test('decrypt',
-        () => expect(encrypter.decrypt(cipherText), equals(plainText)));
+    test('decrypt', () => expect(encrypter.decrypt(encrypted), equals(text)));
   });
 
   group('RSA', () {
@@ -45,11 +43,9 @@ void main() {
         parser.parse(File('test/private.pem').readAsStringSync());
 
     final encrypter = Encrypter(RSA(publicKey, privateKey));
+    final encrypted = encrypter.encrypt(text);
 
-    final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
-    final cipherText = encrypter.encrypt(plainText);
-
-    test('encrypt',
-        () => expect(encrypter.decrypt(cipherText), equals(plainText)));
+    test('encrypt/decrypt',
+        () => expect(encrypter.decrypt(encrypted), equals(text)));
   });
 }

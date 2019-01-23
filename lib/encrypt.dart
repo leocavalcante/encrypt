@@ -1,8 +1,7 @@
 library encrypt;
 
-import 'dart:convert';
-
-import 'src/helpers.dart';
+import 'dart:typed_data';
+import 'dart:convert' as convert;
 
 export 'src/aes.dart';
 export 'src/rsa.dart';
@@ -10,11 +9,11 @@ export 'src/salsa20.dart';
 
 /// Interface for the Algorithms.
 abstract class Algorithm {
-  /// Encrypt [plainText] to a hexdecimal representation.
-  String encrypt(String plainText);
+  /// Encrypt [text] to a hexdecimal representation.
+  Encrypted encrypt(String text);
 
   /// Decrypt [cipherText] from a hexdecimal representation.
-  String decrypt(String cipherText);
+  String decrypt(Encrypted encrypted);
 }
 
 /// Wraps Algorithms in a unique Container.
@@ -24,24 +23,32 @@ class Encrypter {
   Encrypter(this.algo);
 
   /// Calls [encrypt] on the wrapped Algorithm.
-  String encrypt(String plainText) {
-    return algo.encrypt(plainText);
+  Encrypted encrypt(String text) {
+    return algo.encrypt(text);
   }
 
   /// Calls [decrypt] on the wrapped Algorithm.
-  String decrypt(String cipherText) {
-    return algo.decrypt(cipherText);
+  String decrypt(Encrypted encrypted) {
+    return algo.decrypt(encrypted);
   }
 }
 
-/// Swap bytes representation from hexdecimal to Base64.
-String from16To64(String hex) {
-  final bytes = createUint8ListFromHexString(hex);
-  return base64.encode(bytes);
-}
+class Encrypted {
+  final Uint8List bytes;
 
-/// Swap bytes representation from Base64 to hexdecimal.
-String from64To16(String encoded) {
-  final bytes = base64.decode(encoded);
-  return formatBytesAsHexString(bytes);
+  Encrypted(this.bytes);
+
+  String get base16 =>
+      bytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join();
+
+  String get base64 => convert.base64.encode(bytes);
+
+  @override
+  bool operator ==(other) {
+    if (other is Encrypted) {
+      return this.base64 == other.base64;
+    }
+
+    return false;
+  }
 }

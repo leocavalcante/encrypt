@@ -1,50 +1,42 @@
 import 'dart:typed_data';
 
-import 'package:pointycastle/api.dart' show KeyParameter;
-import 'package:pointycastle/block/aes_fast.dart';
+import 'package:pointycastle/api.dart' hide Algorithm;
 
 import '../encrypt.dart';
-import 'helpers.dart';
 
 /// Wraps the AES FastEngine Algorithm.
 class AES implements Algorithm {
   final String key;
-  final KeyParameter _params;
-  final AESFastEngine _cipher = AESFastEngine();
+  final PaddedBlockCipherParameters _params;
+  final PaddedBlockCipher _cipher = PaddedBlockCipher('AES/SIC/PKCS7');
 
-  AES(this.key) : _params = KeyParameter(Uint8List.fromList(key.codeUnits));
+  AES(this.key)
+      : _params = PaddedBlockCipherParameters(
+          ParametersWithIV<KeyParameter>(
+              KeyParameter(
+                Uint8List.fromList(key.codeUnits),
+              ),
+              (SecureRandom("Fortuna")
+                    ..seed(KeyParameter(Uint8List.fromList(key.codeUnits))))
+                  .nextBytes(16)),
+          null,
+        );
 
   @override
-  String encrypt(String plainText) {
+  Encrypted encrypt(String text) {
     _cipher
       ..reset()
       ..init(true, _params);
 
-    final input = Uint8List.fromList(plainText.codeUnits);
-    final output = _processBlocks(input);
-
-    return formatBytesAsHexString(output);
+    return Encrypted(_cipher.process(Uint8List.fromList(text.codeUnits)));
   }
 
   @override
-  String decrypt(String cipherText) {
+  String decrypt(Encrypted encrypted) {
     _cipher
       ..reset()
       ..init(false, _params);
 
-    final input = createUint8ListFromHexString(cipherText);
-    final output = _processBlocks(input);
-
-    return String.fromCharCodes(output);
-  }
-
-  Uint8List _processBlocks(Uint8List input) {
-    var output = Uint8List(input.lengthInBytes);
-
-    for (int offset = 0; offset < input.lengthInBytes;) {
-      offset += _cipher.processBlock(input, offset, output, offset);
-    }
-
-    return output;
+    return String.fromCharCodes(_cipher.process(encrypted.bytes));
   }
 }

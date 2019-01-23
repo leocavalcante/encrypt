@@ -8,89 +8,63 @@ A set of high-level APIs over PointyCastle for two-way cryptography.
 
 > Looking for password hashing? Please, visit [password](https://github.com/leocavalcante/password-dart).
 
-## AES (Block Cipher)
+## AES
 ```dart
 import 'package:encrypt/encrypt.dart';
 
 void main() {
-  final key = 'my32lengthsupersecretnooneknows1';
-
-  final encrypter = new Encrypter(new AES(key));
-  final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit ........';
-
-  final encryptedText = encrypter.encrypt(plainText);
-  final decryptedText = encrypter.decrypt(encryptedText);
-
-  print(encryptedText); // db066ce180f62f020617eb720b891c1efcc48b217cb83272812a8efe3b30e7eae4373ddcede4ea77bdae77d126d95457b3759b1983bf4cb4a6a5b051a5690bdf
-  print(decryptedText); // Lorem ipsum dolor sit amet, consectetur adipiscing elit ........
-}
-```
-
-## Salsa20 (Stream Cipher)
-```dart
-import 'package:encrypt/encrypt.dart';
-
-void main() {
-  final key = 'private!!!!!!!!!';
-  final iv = '8bytesiv'; // https://en.wikipedia.org/wiki/Initialization_vector
-  final plainText = 'Secret';
-
-  final encrypter = new Encrypter(new Salsa20(key, iv));
+  final key = 'my 32 length key................';
+  final encrypter = Encrypter(AES(key));
+  final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
 
   final encrypted = encrypter.encrypt(plainText);
   final decrypted = encrypter.decrypt(encrypted);
 
-  print(encrypted); // c5cc91943cf0
-  print(decrypted); // Secret
+  print(decrypted); // Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  print(encrypted.base64); // FFyykKoJhWA+A23eeE8aUNhOgVBQfhIAHNY1YkO9ztlc9uFMCP+HtiMpc/ZBFVsycHwO6CmpWaVP2qLwpj91gQ==
 }
 ```
 
-### Chinese example
+## RSA
 ```dart
-import 'package:encrypt/encrypt.dart';
-
-void main() {
-  final key = '1234567890123456';
-  final iv = '8bytesiv';
-  final encryptor = Encrypter(Salsa20(key, iv));
-  String text = '你好';
-  String base64Text = base64.encode(utf8.encode(text));
-  String encText  = encryptor.encrypt(base64Text);
-  var decStr = utf8.decode(base64.decode(encryptor.decrypt(encText)));
-
-  print('origin:'+text);//你好
-  print('base64Text:'+base64Text);//5L2g5aW9
-  print('enc text:'+encText);//c72f29fd34b15145
-  print('dec text:'+decStr);//你好
-}
-```
-
-## RSA+PKCS1 (Asymmetric)
-```dart
-import 'package:encrypt/encrypt.dart';
 import 'dart:io';
-
+import 'package:encrypt/encrypt.dart';
 import 'package:pointycastle/asymmetric/api.dart';
 
 void main() {
-  final publicKeyFile = File('test/public.pem');
-  final privateKeyFile = File('test/private.pem');
+  final publicKeyFile = File('/path/to/public_key.pem');
+  final privateKeyFile = File('/path/to/private_key.pem');
 
   final parser = RSAKeyParser();
-
   final RSAPublicKey publicKey = parser.parse(publicKeyFile.readAsStringSync());
-  final RSAPrivateKey privateKey =
-      parser.parse(privateKeyFile.readAsStringSync());
+  final RSAPrivateKey privateKey = parser.parse(privateKeyFile.readAsStringSync());
 
-  final encrypter = Encrypter(RSA(publicKey, privateKey));
   final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
+  final encrypter = Encrypter(RSA(publicKey, privateKey));
 
-  final encryptedText = encrypter.encrypt(plainText);
-  final decryptedText = encrypter.decrypt(encryptedText);
+  final encrypted = encrypter.encrypt(plainText);
+  final decrypted = encrypter.decrypt(encrypted);
 
-  print('Hexdecimal: $encryptedText');
-  print('Base64: ${from16To64(encryptedText)}');
-  print(decryptedText);
+  print(decrypted); // Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  print(encrypted.base64); // XWMuHTeO86gC6SsUh14h+jc4iQW7Vy0TDaBKN926QWhg5c3KKoSuF+6uedLWBEis0LYgTON2rhtTOjmb6bU2P27lgf+5JKdLGKqri2F4sCS3+/p/EPb41f60vnr3whX2o5VRJhJagxtrq0V3eu3X4UeRiO2y7yOt6MXyJxMFcXs=
+}
+
+```
+
+## Salsa20
+```dart
+import 'package:encrypt/encrypt.dart';
+
+void main() {
+  final key = 'my 32 length key................';
+  final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
+  final iv = '8bytesiv'; // https://en.wikipedia.org/wiki/Initialization_vector
+  final encrypter = Encrypter(Salsa20(key, iv));
+
+  final encrypted = encrypter.encrypt(plainText);
+  final decrypted = encrypter.decrypt(encrypted);
+
+  print(decrypted); // Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  print(encrypted.base64); //63MQFprZ03mYQnPJuFn51+SzSAF4C9ixTFcKVUU0lKeT8FlU/I+arBU6knKK//in2z2eQiNEAw==
 }
 ```
----

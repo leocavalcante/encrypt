@@ -7,7 +7,6 @@ import 'package:pointycastle/asymmetric/api.dart';
 import "package:pointycastle/asymmetric/pkcs1.dart";
 import 'package:pointycastle/asymmetric/rsa.dart';
 
-import './helpers.dart';
 import '../encrypt.dart';
 
 /// Wraps the RSA Engine Algorithm.
@@ -25,25 +24,21 @@ class RSA extends Algorithm {
         this._privateKeyParameter = PrivateKeyParameter(privateKey);
 
   @override
-  String encrypt(String plainText) {
+  Encrypted encrypt(String text) {
     _cipher
       ..reset()
       ..init(true, _publicKeyParams);
 
-    final input = Uint8List.fromList(plainText.codeUnits);
-    final output = _cipher.process(input);
-
-    return formatBytesAsHexString(output);
+    return Encrypted(_cipher.process(Uint8List.fromList(text.codeUnits)));
   }
 
   @override
-  String decrypt(String cipherText) {
+  String decrypt(Encrypted encrypted) {
     _cipher
       ..reset()
       ..init(false, _privateKeyParameter);
 
-    final input = createUint8ListFromHexString(cipherText);
-    final output = _cipher.process(input);
+    final output = _cipher.process(encrypted.bytes);
 
     return String.fromCharCodes(output);
   }
