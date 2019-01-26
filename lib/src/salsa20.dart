@@ -15,8 +15,7 @@ class Salsa20 implements Algorithm {
 
   Salsa20(this.key, this.iv)
       : _params = ParametersWithIV<KeyParameter>(
-            KeyParameter(Uint8List.fromList(key.codeUnits)),
-            iv.bytes);
+            KeyParameter(Uint8List.fromList(key.codeUnits)), iv.bytes);
 
   @override
   Encrypted encrypt(String text) {

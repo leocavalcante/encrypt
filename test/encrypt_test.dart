@@ -42,7 +42,8 @@ void main() {
     final RSAPrivateKey privateKey =
         parser.parse(File('test/private.pem').readAsStringSync());
 
-    final encrypter = Encrypter(RSA(publicKey: publicKey, privateKey: privateKey));
+    final encrypter =
+        Encrypter(RSA(publicKey: publicKey, privateKey: privateKey));
     final encrypted = encrypter.encrypt(text);
 
     test('encrypt/decrypt',
@@ -51,9 +52,15 @@ void main() {
     group('StateError', () {
       final badStateEncrypter = Encrypter(RSA());
 
-      test('encrypt', () => expect(() => badStateEncrypter.encrypt(text), throwsStateError));
+      test(
+          'encrypt',
+          () =>
+              expect(() => badStateEncrypter.encrypt(text), throwsStateError));
 
-      test('decrypt', () => expect(() => badStateEncrypter.decrypt(encrypted), throwsStateError));
+      test(
+          'decrypt',
+          () => expect(
+              () => badStateEncrypter.decrypt(encrypted), throwsStateError));
     });
   });
 }

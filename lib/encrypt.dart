@@ -50,7 +50,8 @@ class Encrypted {
   Encrypted(this.bytes);
 
   /// Creates an Encrypted object from a hexdecimal string.
-  Encrypted.fromBase16(String encoded) : bytes = _createUint8ListFromHexString(encoded);
+  Encrypted.fromBase16(String encoded)
+      : bytes = _createUint8ListFromHexString(encoded);
 
   /// Creates an Encrypted object from a Base64 string.
   Encrypted.fromBase64(String encoded) : bytes = convert.base64.decode(encoded);
@@ -82,7 +83,8 @@ class IV {
   IV.fromLength(int length) : bytes = Uint8List(length);
 
   /// Creates an IV using a hexdecimal string.
-  IV.fromBase16(String encoded) : bytes = _createUint8ListFromHexString(encoded);
+  IV.fromBase16(String encoded)
+      : bytes = _createUint8ListFromHexString(encoded);
 
   /// Creates an IV using a Base64 encoded string.
   IV.fromBase64(String encoded) : bytes = convert.base64.decode(encoded);

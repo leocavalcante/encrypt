@@ -12,5 +12,6 @@ void main() {
   print(decrypted); // Lorem ipsum dolor sit amet, consectetur adipiscing elit
   print(encrypted.bytes);
   print(encrypted.base16);
-  print(encrypted.base64); // CR+IAWBEx3sA/dLkkFM/orYr9KftrGa7lIFSAAmVPbKIOLDOzGwEi9ohstDBqDLIaXMEeulwXQ==
+  print(encrypted
+      .base64); // CR+IAWBEx3sA/dLkkFM/orYr9KftrGa7lIFSAAmVPbKIOLDOzGwEi9ohstDBqDLIaXMEeulwXQ==
 }
