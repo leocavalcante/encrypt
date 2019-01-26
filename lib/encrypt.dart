@@ -33,14 +33,17 @@ class Encrypter {
   }
 }
 
+/// Represents an encripted value.
 class Encrypted {
   final Uint8List bytes;
 
   Encrypted(this.bytes);
 
+  /// Gets the encrypted bytes by a Hexdecimal representation.
   String get base16 =>
       bytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join();
 
+  /// Gets the encrypted bytes by a Base64  representation.
   String get base64 => convert.base64.encode(bytes);
 
   @override

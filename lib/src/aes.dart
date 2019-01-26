@@ -4,7 +4,7 @@ import 'package:pointycastle/api.dart' hide Algorithm;
 
 import '../encrypt.dart';
 
-/// Wraps the AES FastEngine Algorithm.
+/// Wraps the AES Algorithm.
 class AES implements Algorithm {
   final String key;
   final PaddedBlockCipherParameters _params;
