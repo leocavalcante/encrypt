@@ -8,24 +8,79 @@ A set of high-level APIs over PointyCastle for two-way cryptography.
 
 > Looking for password hashing? Please, visit [password](https://github.com/leocavalcante/password-dart).
 
-## AES
+## API Overview
+
+### `Encrypter(Algorithm algo)`
+Acts like a Adapter interface for any algorithm. Exposes:
+- `Encrypted encrypt(String text)` that encrypts the given plain-text.
+- `String decrypt(Encrypted encrypted)` that decrypts the given `Encrypted` value.
+- `String decrypt16(String encoded)` sugar for `decrypt(Encrypted.fromBase16(encoded))`.
+- `String decrypt64(String encoded)` sugar for `decrypt(Encrypted.fromBase64(encoded))`.
+
+### `Encrypted(Uint8List bytes)`
+Wraps the encrypted bytes. Exposes:
+- `Encrypted.fromBase16(String encoded)` that creates an Encrypted object from a hexdecimal string.
+- `Encrypted.fromBase64(String encoded)` that creates an Encrypted object from a Base64 string.
+- `String base16` that returns a hexdecimal representation of the bytes.
+- `String base64` that returns a Base64 representation of the bytes.
+- `Uint8List bytes` that returns raw bytes.
+
+### `IV(UintList bytes)`
+Represents an Initialization Vector https://en.wikipedia.org/wiki/Initialization_vector. Exposes:
+- `IV.fromBase16(String encoded)` that creates an IV from a hexdecimal string.
+- `IV.fromBase64(String encoded)` that creates an IV from a Base64 string.
+- `IV.fromLength(int length)` that is a sugar for `IV(Uint8List(length))`.
+
+## Algorithms
+Current status is:
+- AES with SIC mode and PKCS7 padding
+- RSA with PKCS1 encoding
+- Salsa20
+
+## Usage
+
+### Symmetric
+
+#### AES
 ```dart
 import 'package:encrypt/encrypt.dart';
 
 void main() {
-  final key = 'my 32 length key................';
-  final encrypter = Encrypter(AES(key));
   final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
+  final key = 'my 32 length key................';
+  final iv = IV.fromLength(16);
+
+  final encrypter = Encrypter(AES(key, iv));
 
   final encrypted = encrypter.encrypt(plainText);
   final decrypted = encrypter.decrypt(encrypted);
 
   print(decrypted); // Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  print(encrypted.base64); // FFyykKoJhWA+A23eeE8aUNhOgVBQfhIAHNY1YkO9ztlc9uFMCP+HtiMpc/ZBFVsycHwO6CmpWaVP2qLwpj91gQ==
+  print(encrypted.base64); // R4PxiU3h8YoIRqVowBXm36ZcCeNeZ4s1OvVBTfFlZRdmohQqOpPQqD1YecJeZMAop/hZ4OxqgC1WtwvX/hP9mw==
 }
 ```
 
-## RSA
+#### Salsa20
+```dart
+import 'package:encrypt/encrypt.dart';
+
+void main() {
+  final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
+  final key = 'my 32 length key................';
+  final iv = IV.fromLength(8);
+  final encrypter = Encrypter(Salsa20(key, iv));
+
+  final encrypted = encrypter.encrypt(plainText);
+  final decrypted = encrypter.decrypt(encrypted);
+
+  print(decrypted); // Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  print(encrypted.base64); // CR+IAWBEx3sA/dLkkFM/orYr9KftrGa7lIFSAAmVPbKIOLDOzGwEi9ohstDBqDLIaXMEeulwXQ==
+}
+```
+
+### Asymmetric
+
+#### RSA
 ```dart
 import 'dart:io';
 import 'package:encrypt/encrypt.dart';
@@ -49,25 +104,6 @@ void main() {
   print(encrypted.base64); // XWMuHTeO86gC6SsUh14h+jc4iQW7Vy0TDaBKN926QWhg5c3KKoSuF+6uedLWBEis0LYgTON2rhtTOjmb6bU2P27lgf+5JKdLGKqri2F4sCS3+/p/EPb41f60vnr3whX2o5VRJhJagxtrq0V3eu3X4UeRiO2y7yOt6MXyJxMFcXs=
 }
 ```
-### Note
+##### Note
 If you are just encrypting or just decrypting, you can ignore the respectives `privateKey` and `publicKey`.
 Trying the encrypt without a public key or decrypt without a private key will throw a `StateError`.
-
-
-## Salsa20
-```dart
-import 'package:encrypt/encrypt.dart';
-
-void main() {
-  final key = 'my 32 length key................';
-  final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
-  final iv = '8bytesiv'; // https://en.wikipedia.org/wiki/Initialization_vector
-  final encrypter = Encrypter(Salsa20(key, iv));
-
-  final encrypted = encrypter.encrypt(plainText);
-  final decrypted = encrypter.decrypt(encrypted);
-
-  print(decrypted); // Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  print(encrypted.base64); //63MQFprZ03mYQnPJuFn51+SzSAF4C9ixTFcKVUU0lKeT8FlU/I+arBU6knKK//in2z2eQiNEAw==
-}
-```

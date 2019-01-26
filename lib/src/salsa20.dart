@@ -8,7 +8,7 @@ import '../encrypt.dart';
 /// Wraps the Salsa20 Engine.
 class Salsa20 implements Algorithm {
   final String key;
-  final String iv;
+  final IV iv;
   final ParametersWithIV<KeyParameter> _params;
 
   final Salsa20Engine _cipher = Salsa20Engine();
@@ -16,7 +16,7 @@ class Salsa20 implements Algorithm {
   Salsa20(this.key, this.iv)
       : _params = ParametersWithIV<KeyParameter>(
             KeyParameter(Uint8List.fromList(key.codeUnits)),
-            Uint8List.fromList(iv.codeUnits));
+            iv.bytes);
 
   @override
   Encrypted encrypt(String text) {

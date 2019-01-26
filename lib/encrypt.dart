@@ -31,6 +31,16 @@ class Encrypter {
   String decrypt(Encrypted encrypted) {
     return algo.decrypt(encrypted);
   }
+
+  /// Sugar for `decrypt(Encrypted.fromBase16(encoded))`.
+  String decrypt16(String encoded) {
+    return algo.decrypt(Encrypted.fromBase16(encoded));
+  }
+
+  /// Sugar for `decrypt(Encrypted.fromBase64(encoded))`.
+  String decrypt64(String encoded) {
+    return algo.decrypt(Encrypted.fromBase64(encoded));
+  }
 }
 
 /// Represents an encripted value.
@@ -38,6 +48,12 @@ class Encrypted {
   final Uint8List bytes;
 
   Encrypted(this.bytes);
+
+  /// Creates an Encrypted object from a hexdecimal string.
+  Encrypted.fromBase16(String encoded) : bytes = _createUint8ListFromHexString(encoded);
+
+  /// Creates an Encrypted object from a Base64 string.
+  Encrypted.fromBase64(String encoded) : bytes = convert.base64.decode(encoded);
 
   /// Gets the encrypted bytes by a Hexdecimal representation.
   String get base16 =>
@@ -54,4 +70,30 @@ class Encrypted {
 
     return false;
   }
+}
+
+/// Represents an Initialization Vector.
+class IV {
+  final Uint8List bytes;
+
+  IV(this.bytes);
+
+  /// Sugar for IV(Uint8List(length)).
+  IV.fromLength(int length) : bytes = Uint8List(length);
+
+  /// Creates an IV using a hexdecimal string.
+  IV.fromBase16(String encoded) : bytes = _createUint8ListFromHexString(encoded);
+
+  /// Creates an IV using a Base64 encoded string.
+  IV.fromBase64(String encoded) : bytes = convert.base64.decode(encoded);
+}
+
+Uint8List _createUint8ListFromHexString(String hex) {
+  var result = Uint8List(hex.length ~/ 2);
+  for (var i = 0; i < hex.length; i += 2) {
+    var num = hex.substring(i, i + 2);
+    var byte = int.parse(num, radix: 16);
+    result[i ~/ 2] = byte;
+  }
+  return result;
 }
