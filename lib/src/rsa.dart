@@ -19,12 +19,16 @@ class RSA extends Algorithm {
 
   final AsymmetricBlockCipher _cipher = PKCS1Encoding(RSAEngine());
 
-  RSA(this.publicKey, this.privateKey)
+  RSA({this.publicKey, this.privateKey})
       : this._publicKeyParams = PublicKeyParameter(publicKey),
         this._privateKeyParameter = PrivateKeyParameter(privateKey);
 
   @override
   Encrypted encrypt(String text) {
+    if (publicKey == null) {
+      throw StateError('Can\'t encrypt without a public key, null given.');
+    }
+
     _cipher
       ..reset()
       ..init(true, _publicKeyParams);
@@ -34,6 +38,10 @@ class RSA extends Algorithm {
 
   @override
   String decrypt(Encrypted encrypted) {
+    if (privateKey == null) {
+      throw StateError('Can\'t decrypt without a private key, null given.');
+    }
+
     _cipher
       ..reset()
       ..init(false, _privateKeyParameter);

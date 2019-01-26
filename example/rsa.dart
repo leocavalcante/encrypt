@@ -14,7 +14,7 @@ void main() {
       parser.parse(privateKeyFile.readAsStringSync());
 
   final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
-  final encrypter = Encrypter(RSA(publicKey, privateKey));
+  final encrypter = Encrypter(RSA(publicKey: publicKey, privateKey: privateKey));
 
   final encrypted = encrypter.encrypt(plainText);
   final decrypted = encrypter.decrypt(encrypted);
