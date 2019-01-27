@@ -24,7 +24,7 @@ class RSA extends Algorithm {
         this._privateKeyParameter = PrivateKeyParameter(privateKey);
 
   @override
-  Encrypted encrypt(String text) {
+  Encrypted encrypt(Uint8List bytes) {
     if (publicKey == null) {
       throw StateError('Can\'t encrypt without a public key, null given.');
     }
@@ -33,11 +33,11 @@ class RSA extends Algorithm {
       ..reset()
       ..init(true, _publicKeyParams);
 
-    return Encrypted(_cipher.process(Uint8List.fromList(text.codeUnits)));
+    return Encrypted(_cipher.process(bytes));
   }
 
   @override
-  String decrypt(Encrypted encrypted) {
+  Uint8List decrypt(Encrypted encrypted) {
     if (privateKey == null) {
       throw StateError('Can\'t decrypt without a private key, null given.');
     }
@@ -46,9 +46,7 @@ class RSA extends Algorithm {
       ..reset()
       ..init(false, _privateKeyParameter);
 
-    final output = _cipher.process(encrypted.bytes);
-
-    return String.fromCharCodes(output);
+    return _cipher.process(encrypted.bytes);
   }
 }
 
