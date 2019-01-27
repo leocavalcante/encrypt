@@ -18,20 +18,20 @@ class Salsa20 implements Algorithm {
             KeyParameter(Uint8List.fromList(key.codeUnits)), iv.bytes);
 
   @override
-  Encrypted encrypt(String text) {
+  Encrypted encrypt(Uint8List bytes) {
     _cipher
       ..reset()
       ..init(true, _params);
 
-    return Encrypted(_cipher.process(Uint8List.fromList(text.codeUnits)));
+    return Encrypted(_cipher.process(bytes));
   }
 
   @override
-  String decrypt(Encrypted encrypted) {
+  Uint8List decrypt(Encrypted encrypted) {
     _cipher
       ..reset()
       ..init(false, _params);
 
-    return String.fromCharCodes(_cipher.process(encrypted.bytes));
+    return _cipher.process(encrypted.bytes);
   }
 }

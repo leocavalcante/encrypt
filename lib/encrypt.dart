@@ -1,7 +1,7 @@
 library encrypt;
 
-import 'dart:typed_data';
 import 'dart:convert' as convert;
+import 'dart:typed_data';
 
 export 'src/aes.dart';
 export 'src/rsa.dart';
@@ -9,11 +9,11 @@ export 'src/salsa20.dart';
 
 /// Interface for the Algorithms.
 abstract class Algorithm {
-  /// Encrypt [text] to a hexdecimal representation.
-  Encrypted encrypt(String text);
+  /// Encrypt [bytes].
+  Encrypted encrypt(Uint8List bytes);
 
-  /// Decrypt [cipherText] from a hexdecimal representation.
-  String decrypt(Encrypted encrypted);
+  /// Decrypt [encrypted] value.
+  Uint8List decrypt(Encrypted encrypted);
 }
 
 /// Wraps Algorithms in a unique Container.
@@ -23,23 +23,23 @@ class Encrypter {
   Encrypter(this.algo);
 
   /// Calls [encrypt] on the wrapped Algorithm.
-  Encrypted encrypt(String text) {
-    return algo.encrypt(text);
+  Encrypted encrypt(String input) {
+    return algo.encrypt(Uint8List.fromList(convert.utf8.encode(input)));
   }
 
   /// Calls [decrypt] on the wrapped Algorithm.
   String decrypt(Encrypted encrypted) {
-    return algo.decrypt(encrypted);
+    return convert.utf8.decode(algo.decrypt(encrypted), allowMalformed: true);
   }
 
   /// Sugar for `decrypt(Encrypted.fromBase16(encoded))`.
   String decrypt16(String encoded) {
-    return algo.decrypt(Encrypted.fromBase16(encoded));
+    return decrypt(Encrypted.fromBase16(encoded));
   }
 
   /// Sugar for `decrypt(Encrypted.fromBase64(encoded))`.
   String decrypt64(String encoded) {
-    return algo.decrypt(Encrypted.fromBase64(encoded));
+    return decrypt(Encrypted.fromBase64(encoded));
   }
 }
 
