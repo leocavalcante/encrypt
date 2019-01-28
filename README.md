@@ -12,24 +12,32 @@ A set of high-level APIs over PointyCastle for two-way cryptography.
 
 ### `Encrypter(Algorithm algo)`
 Acts like a Adapter interface for any algorithm. Exposes:
-- `Encrypted encrypt(String text)` that encrypts the given plain-text.
-- `String decrypt(Encrypted encrypted)` that decrypts the given `Encrypted` value.
+- `Encrypted encrypt(String text)` encrypts the given plain-text.
+- `String decrypt(Encrypted encrypted)` decrypts the given `Encrypted` value.
 - `String decrypt16(String encoded)` sugar for `decrypt(Encrypted.fromBase16(encoded))`.
 - `String decrypt64(String encoded)` sugar for `decrypt(Encrypted.fromBase64(encoded))`.
 
 ### `Encrypted(Uint8List bytes)`
 Wraps the encrypted bytes. Exposes:
-- `Encrypted.fromBase16(String encoded)` that creates an Encrypted object from a hexdecimal string.
-- `Encrypted.fromBase64(String encoded)` that creates an Encrypted object from a Base64 string.
-- `String base16` that returns a hexdecimal representation of the bytes.
-- `String base64` that returns a Base64 representation of the bytes.
-- `Uint8List bytes` that returns raw bytes.
+- `Encrypted.fromBase16(String encoded)` creates an Encrypted object from a hexdecimal string.
+- `Encrypted.fromBase64(String encoded)` creates an Encrypted object from a Base64 string.
+- `String base16` returns a hexdecimal representation of the bytes.
+- `String base64` returns a Base64 representation of the bytes.
+- `Uint8List bytes` returns raw bytes.
 
-### `IV(UintList bytes)`
+### `Key(Uint8List bytes)`
+Represents an Encryption Key. Exposes:
+- `Key.fromBase16(String encoded)` creates a Key from a hexdecimal string.
+- `Key.fromBase64(String encoded)` creates a Key from a Base64 string.
+- `Key.fromUtf8(String encoded)` creates a Key from a UTF-8 string.
+- `Key.fromLength(int length)` sugar for `Key(Uint8List(length))`.
+
+### `IV(Uint8List bytes)`
 Represents an Initialization Vector https://en.wikipedia.org/wiki/Initialization_vector. Exposes:
-- `IV.fromBase16(String encoded)` that creates an IV from a hexdecimal string.
-- `IV.fromBase64(String encoded)` that creates an IV from a Base64 string.
-- `IV.fromLength(int length)` that is a sugar for `IV(Uint8List(length))`.
+- `IV.fromBase16(String encoded)` creates an IV from a hexdecimal string.
+- `IV.fromBase64(String encoded)` creates an IV from a Base64 string.
+- `IV.fromUtf8(String encoded)` creates an IV from a UTF-8 string.
+- `IV.fromLength(int length)` sugar for `IV(Uint8List(length))`.
 
 ## Algorithms
 Current status is:
