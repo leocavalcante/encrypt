@@ -7,7 +7,7 @@ import 'package:test/test.dart';
 
 void main() {
   final text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
-  final key = 'my32lengthsupersecretnooneknows1';
+  final key = Key.fromUtf8('my32lengthsupersecretnooneknows1');
   final iv = IV.fromLength(8);
 
   group('AES', () {
