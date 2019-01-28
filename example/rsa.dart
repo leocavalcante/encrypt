@@ -20,9 +20,8 @@ void main() {
   final encrypted = encrypter.encrypt(plainText);
   final decrypted = encrypter.decrypt(encrypted);
 
-  print(decrypted); // Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  print(decrypted);
   print(encrypted.bytes);
   print(encrypted.base16);
-  print(encrypted
-      .base64); // XWMuHTeO86gC6SsUh14h+jc4iQW7Vy0TDaBKN926QWhg5c3KKoSuF+6uedLWBEis0LYgTON2rhtTOjmb6bU2P27lgf+5JKdLGKqri2F4sCS3+/p/EPb41f60vnr3whX2o5VRJhJagxtrq0V3eu3X4UeRiO2y7yOt6MXyJxMFcXs=
+  print(encrypted.base64);
 }

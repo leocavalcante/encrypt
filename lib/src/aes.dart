@@ -6,15 +6,14 @@ import '../encrypt.dart';
 
 /// Wraps the AES Algorithm.
 class AES implements Algorithm {
-  final String key;
+  final Key key;
   final IV iv;
   final PaddedBlockCipherParameters _params;
   final PaddedBlockCipher _cipher = PaddedBlockCipher('AES/SIC/PKCS7');
 
   AES(this.key, this.iv)
       : _params = PaddedBlockCipherParameters(
-            ParametersWithIV<KeyParameter>(
-                KeyParameter(Uint8List.fromList(key.codeUnits)), iv.bytes),
+            ParametersWithIV<KeyParameter>(KeyParameter(key.bytes), iv.bytes),
             null);
 
   @override

@@ -88,6 +88,31 @@ class IV {
 
   /// Creates an IV using a Base64 encoded string.
   IV.fromBase64(String encoded) : bytes = convert.base64.decode(encoded);
+
+  /// Creates an IV from a UTF-8 string.
+  IV.fromUtf8(String encoded)
+      : bytes = Uint8List.fromList(convert.utf8.encode(encoded));
+}
+
+/// Represents an encryption key.
+class Key {
+  final Uint8List bytes;
+
+  Key(this.bytes);
+
+  /// Sugar for Key(Uint8List(length)).
+  Key.fromLength(int length) : bytes = Uint8List(length);
+
+  /// Creates a Key using a hexdecimal string.
+  Key.fromBase16(String encoded)
+      : bytes = _createUint8ListFromHexString(encoded);
+
+  /// Creates a Key using a Base64 encoded string.
+  Key.fromBase64(String encoded) : bytes = convert.base64.decode(encoded);
+
+  /// Creates a Key from a UTF-8 string.
+  Key.fromUtf8(String encoded)
+      : bytes = Uint8List.fromList(convert.utf8.encode(encoded));
 }
 
 Uint8List _createUint8ListFromHexString(String hex) {
