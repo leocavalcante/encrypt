@@ -33,7 +33,7 @@ Represents an Initialization Vector https://en.wikipedia.org/wiki/Initialization
 
 ## Algorithms
 Current status is:
-- AES with SIC mode and PKCS7 padding
+- AES with PKCS7 padding
 - RSA with PKCS1 encoding
 - Salsa20
 
@@ -59,6 +59,25 @@ void main() {
   print(encrypted.base64); // R4PxiU3h8YoIRqVowBXm36ZcCeNeZ4s1OvVBTfFlZRdmohQqOpPQqD1YecJeZMAop/hZ4OxqgC1WtwvX/hP9mw==
 }
 ```
+
+##### Mode of operation
+
+Default mode is SIC `AESMode.sic`, you can override it using the `mode` named parameter:
+
+```dart
+final encrypter = Encrypter(AES(key, iv, mode: AESMode.cbc));
+}
+```
+
+###### Supported modes are:
+- CBC `AESMode.cbc`
+- CFB-64 `AESMode.cfb64`
+- CTR `AESMode.ctr`
+- ECB `AESMode.ecb`
+- OFB-64/GCTR `AESMode.ofb64Gctr`
+- OFB-64 `AESMode.ofb64`
+- SIC `AESMode.sic`
+
 
 #### Salsa20
 ```dart
