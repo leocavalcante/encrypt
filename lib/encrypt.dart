@@ -53,7 +53,13 @@ class Encrypted {
 
   /// Creates an Encrypted object from a hexdecimal string.
   Encrypted.fromBase16(String encoded)
-      : _bytes = _createUint8ListFromHexString(encoded);
+      : _bytes = Uint8List.fromList(
+          List.generate(encoded.length,
+                  (i) => i % 2 == 0 ? encoded.substring(i, i + 2) : null)
+              .where((b) => b != null)
+              .map((b) => int.parse(b, radix: 16))
+              .toList(),
+        );
 
   /// Creates an Encrypted object from a Base64 string.
   Encrypted.fromBase64(String encoded)
@@ -71,10 +77,10 @@ class Encrypted {
 
   /// Gets the Encrypted bytes as a Hexdecimal representation.
   String get base16 =>
-      bytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join();
+      _bytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join();
 
   /// Gets the Encrypted bytes as a Base64 representation.
-  String get base64 => convert.base64.encode(bytes);
+  String get base64 => convert.base64.encode(_bytes);
 
   @override
   bool operator ==(other) {
@@ -102,14 +108,4 @@ class Key extends Encrypted {
   Key.fromBase64(String encoded) : super.fromBase64(encoded);
   Key.fromUtf8(String input) : super.fromUtf8(input);
   Key.fromLength(int length) : super.fromLength(length);
-}
-
-Uint8List _createUint8ListFromHexString(String hex) {
-  var result = Uint8List(hex.length ~/ 2);
-  for (var i = 0; i < hex.length; i += 2) {
-    var num = hex.substring(i, i + 2);
-    var byte = int.parse(num, radix: 16);
-    result[i ~/ 2] = byte;
-  }
-  return result;
 }
