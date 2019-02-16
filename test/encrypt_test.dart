@@ -8,7 +8,6 @@ import 'package:test/test.dart';
 void main() {
   const text = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
   final key = Key.fromUtf8('my32lengthsupersecretnooneknows1');
-  final iv = IV.fromLength(16);
 
   group('AES', () {
     const <AESMode, String>{
@@ -28,7 +27,7 @@ void main() {
           'DIXikIUegcvoS6qSszWXgGkVga1GE6a+WkO24Srn1xtc9wtqN4QzWen95c7w2vy7NzMs+fQGPgQ5e/WesjaSng==',
     }.forEach((mode, encoded) {
       group('$mode', () {
-        final encrypter = Encrypter(AES(key, iv, mode: mode));
+        final encrypter = Encrypter(AES(key, IV.fromLength(16), mode: mode));
         final encrypted = Encrypted(base64.decode(encoded));
 
         test('encrypt', () {
@@ -46,7 +45,7 @@ void main() {
     const encoded =
         '2FCmbbVYQrbLn8pkyPe4mt0ooqNRA8Dm9EmzZVSWgW+M/6FembxLmVdt9/JJt+NSMnx1hNjuOw==';
 
-    final encrypter = Encrypter(Salsa20(key, iv));
+    final encrypter = Encrypter(Salsa20(key, IV.fromLength(8)));
     final encrypted = Encrypted(base64.decode(encoded));
 
     test('encrypt', () => expect(encrypter.encrypt(text), equals(encrypted)));
