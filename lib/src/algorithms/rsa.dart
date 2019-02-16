@@ -1,13 +1,4 @@
-import 'dart:convert';
-import 'dart:typed_data';
-
-import 'package:asn1lib/asn1lib.dart';
-import 'package:pointycastle/api.dart' hide Algorithm;
-import 'package:pointycastle/asymmetric/api.dart';
-import "package:pointycastle/asymmetric/pkcs1.dart";
-import 'package:pointycastle/asymmetric/rsa.dart';
-
-import '../encrypt.dart';
+part of encrypt;
 
 /// Wraps the RSA Engine Algorithm.
 class RSA extends Algorithm {
@@ -100,7 +91,7 @@ class RSAKeyParser {
         .map((row) => row.trim())
         .join('');
 
-    final keyBytes = Uint8List.fromList(base64.decode(keyText));
+    final keyBytes = Uint8List.fromList(convert.base64.decode(keyText));
     final asn1Parser = ASN1Parser(keyBytes);
 
     return asn1Parser.nextObject() as ASN1Sequence;

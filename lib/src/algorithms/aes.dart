@@ -1,8 +1,4 @@
-import 'dart:typed_data';
-
-import 'package:pointycastle/api.dart' hide Algorithm;
-
-import '../encrypt.dart';
+part of encrypt;
 
 /// Wraps the AES Algorithm.
 class AES implements Algorithm {
