@@ -1,3 +1,6 @@
+# 1.0.2
+* Fix ECB mode
+
 # 1.0.1
 * RSA
 
