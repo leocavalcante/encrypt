@@ -1,9 +1,4 @@
-import 'dart:typed_data';
-
-import 'package:pointycastle/api.dart' show ParametersWithIV, KeyParameter;
-import 'package:pointycastle/stream/salsa20.dart';
-
-import '../encrypt.dart';
+part of encrypt;
 
 /// Wraps the Salsa20 Engine.
 class Salsa20 implements Algorithm {
