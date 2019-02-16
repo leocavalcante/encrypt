@@ -1,5 +1,5 @@
-# 1.0.2
-* Fix ECB mode
+# 2.0.0
+* All new API
 
 # 1.0.1
 * RSA
