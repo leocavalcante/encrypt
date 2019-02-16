@@ -3,6 +3,8 @@ library encrypt;
 import 'dart:convert' as convert;
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
+
 export 'src/aes.dart';
 export 'src/rsa.dart';
 export 'src/salsa20.dart';
@@ -66,7 +68,7 @@ class Encrypted {
   @override
   bool operator ==(other) {
     if (other is Encrypted) {
-      return this.base64 == other.base64;
+      return const ListEquality().equals(bytes, other.bytes);
     }
 
     return false;

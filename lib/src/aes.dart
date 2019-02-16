@@ -15,8 +15,12 @@ class AES implements Algorithm {
   AES(this.key, this.iv, {this.mode = AESMode.sic})
       : _cipher = PaddedBlockCipher('AES/${_modes[mode]}/PKCS7'),
         _params = PaddedBlockCipherParameters(
-            ParametersWithIV<KeyParameter>(KeyParameter(key.bytes), iv.bytes),
-            null);
+          mode == AESMode.ecb
+              ? KeyParameter(key.bytes)
+              : ParametersWithIV<KeyParameter>(
+                  KeyParameter(key.bytes), iv.bytes),
+          null,
+        );
 
   @override
   Encrypted encrypt(Uint8List bytes) {
