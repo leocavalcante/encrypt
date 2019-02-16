@@ -47,16 +47,18 @@ class Encrypter {
 
 /// Represents an encripted value.
 class Encrypted {
-  final Uint8List bytes;
+  Encrypted(this._bytes);
 
-  Encrypted(this.bytes);
+  final Uint8List _bytes;
+  Uint8List get bytes => _bytes;
 
   /// Creates an Encrypted object from a hexdecimal string.
   Encrypted.fromBase16(String encoded)
-      : bytes = _createUint8ListFromHexString(encoded);
+      : _bytes = _createUint8ListFromHexString(encoded);
 
   /// Creates an Encrypted object from a Base64 string.
-  Encrypted.fromBase64(String encoded) : bytes = convert.base64.decode(encoded);
+  Encrypted.fromBase64(String encoded)
+      : _bytes = convert.base64.decode(encoded);
 
   /// Gets the encrypted bytes by a Hexdecimal representation.
   String get base16 =>
@@ -77,44 +79,46 @@ class Encrypted {
 
 /// Represents an Initialization Vector.
 class IV {
-  final Uint8List bytes;
+  IV(this._bytes);
 
-  IV(this.bytes);
+  final Uint8List _bytes;
+  Uint8List get bytes => _bytes;
 
   /// Sugar for IV(Uint8List(length)).
-  IV.fromLength(int length) : bytes = Uint8List(length);
+  IV.fromLength(int length) : _bytes = Uint8List(length);
 
   /// Creates an IV using a hexdecimal string.
   IV.fromBase16(String encoded)
-      : bytes = _createUint8ListFromHexString(encoded);
+      : _bytes = _createUint8ListFromHexString(encoded);
 
   /// Creates an IV using a Base64 encoded string.
-  IV.fromBase64(String encoded) : bytes = convert.base64.decode(encoded);
+  IV.fromBase64(String encoded) : _bytes = convert.base64.decode(encoded);
 
   /// Creates an IV from a UTF-8 string.
   IV.fromUtf8(String encoded)
-      : bytes = Uint8List.fromList(convert.utf8.encode(encoded));
+      : _bytes = Uint8List.fromList(convert.utf8.encode(encoded));
 }
 
 /// Represents an encryption key.
 class Key {
-  final Uint8List bytes;
+  Key(this._bytes);
 
-  Key(this.bytes);
+  final Uint8List _bytes;
+  Uint8List get bytes => _bytes;
 
   /// Sugar for Key(Uint8List(length)).
-  Key.fromLength(int length) : bytes = Uint8List(length);
+  Key.fromLength(int length) : _bytes = Uint8List(length);
 
   /// Creates a Key using a hexdecimal string.
   Key.fromBase16(String encoded)
-      : bytes = _createUint8ListFromHexString(encoded);
+      : _bytes = _createUint8ListFromHexString(encoded);
 
   /// Creates a Key using a Base64 encoded string.
-  Key.fromBase64(String encoded) : bytes = convert.base64.decode(encoded);
+  Key.fromBase64(String encoded) : _bytes = convert.base64.decode(encoded);
 
   /// Creates a Key from a UTF-8 string.
   Key.fromUtf8(String encoded)
-      : bytes = Uint8List.fromList(convert.utf8.encode(encoded));
+      : _bytes = Uint8List.fromList(convert.utf8.encode(encoded));
 }
 
 Uint8List _createUint8ListFromHexString(String hex) {
