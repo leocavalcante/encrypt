@@ -98,7 +98,7 @@ class RSAKeyParser {
   }
 
   ASN1Sequence _pkcs8PublicSequence(ASN1Sequence sequence) {
-    final ASN1BitString bitString = sequence.elements[1];
+    final ASN1BitString bitString = sequence.elements[1] as ASN1BitString;
     final bytes = bitString.valueBytes().sublist(1);
     final parser = ASN1Parser(Uint8List.fromList(bytes));
 
@@ -106,7 +106,7 @@ class RSAKeyParser {
   }
 
   ASN1Sequence _pkcs8PrivateSequence(ASN1Sequence sequence) {
-    final ASN1BitString bitString = sequence.elements[2];
+    final ASN1BitString bitString = sequence.elements[2] as ASN1BitString;
     final bytes = bitString.valueBytes();
     final parser = ASN1Parser(bytes);
 

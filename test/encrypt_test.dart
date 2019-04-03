@@ -56,10 +56,10 @@ void main() {
   group('RSA', () {
     final parser = RSAKeyParser();
 
-    final RSAPublicKey publicKey =
-        parser.parse(File('test/public.pem').readAsStringSync());
-    final RSAPrivateKey privateKey =
-        parser.parse(File('test/private.pem').readAsStringSync());
+    final RSAPublicKey publicKey = parser
+        .parse(File('test/public.pem').readAsStringSync()) as RSAPublicKey;
+    final RSAPrivateKey privateKey = parser
+        .parse(File('test/private.pem').readAsStringSync()) as RSAPrivateKey;
 
     final encrypter =
         Encrypter(RSA(publicKey: publicKey, privateKey: privateKey));
