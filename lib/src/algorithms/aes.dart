@@ -5,18 +5,26 @@ class AES implements Algorithm {
   final Key key;
   final IV iv;
   final AESMode mode;
-  final PaddedBlockCipherParameters _params;
-  final PaddedBlockCipher _cipher;
+  final String padding;
+  final CipherParameters _params;
+  final BlockCipher _cipher;
 
-  AES(this.key, this.iv, {this.mode = AESMode.sic})
-      : _cipher = PaddedBlockCipher('AES/${_modes[mode]}/PKCS7'),
-        _params = PaddedBlockCipherParameters(
-          mode == AESMode.ecb
-              ? KeyParameter(key.bytes)
-              : ParametersWithIV<KeyParameter>(
-                  KeyParameter(key.bytes), iv.bytes),
-          null,
-        );
+  AES(this.key, this.iv, {this.mode = AESMode.sic, this.padding = 'PKCS7'})
+      : _cipher = padding != null
+            ? PaddedBlockCipher('AES/${_modes[mode]}/$padding')
+            : BlockCipher('AES/${_modes[mode]}'),
+        _params = padding == null
+            ? (mode == AESMode.ecb
+                ? KeyParameter(key.bytes)
+                : ParametersWithIV<KeyParameter>(
+                    KeyParameter(key.bytes), iv.bytes))
+            : PaddedBlockCipherParameters(
+                mode == AESMode.ecb
+                    ? KeyParameter(key.bytes)
+                    : ParametersWithIV<KeyParameter>(
+                        KeyParameter(key.bytes), iv.bytes),
+                null,
+              );
 
   @override
   Encrypted encrypt(Uint8List bytes) {

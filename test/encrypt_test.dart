@@ -41,6 +41,33 @@ void main() {
     });
   });
 
+  group('AES (no padding)', () {
+    const <AESMode, String>{
+      AESMode.cbc: '2wZs4YD2LwIGF+tyC4kcHg==',
+      AESMode.cfb64: 'DIXikIUegcs=',
+      AESMode.ctr: 'DIXikIUegcvoS6qSszWXgA==',
+      AESMode.ecb: '2wZs4YD2LwIGF+tyC4kcHg==',
+      AESMode.ofb64Gctr: 'zOBn8gU5GXY=',
+      AESMode.ofb64: 'DIXikIUegcs=',
+      AESMode.sic: 'DIXikIUegcvoS6qSszWXgA==',
+    }.forEach((mode, encoded) {
+      group('$mode', () {
+        final encrypter =
+            Encrypter(AES(key, IV.fromLength(16), mode: mode, padding: null));
+        final encrypted = Encrypted(base64.decode(encoded));
+
+        test('encrypt', () {
+          expect(encrypter.encrypt(text), equals(encrypted));
+        });
+
+        test('decrypt', () {
+          expect(encrypter.decrypt(encrypted),
+              equals(text.substring(0, encrypted.bytes.length)));
+        });
+      });
+    });
+  });
+
   group('Salsa20', () {
     const encoded =
         '2FCmbbVYQrbLn8pkyPe4mt0ooqNRA8Dm9EmzZVSWgW+M/6FembxLmVdt9/JJt+NSMnx1hNjuOw==';
