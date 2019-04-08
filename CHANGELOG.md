@@ -1,3 +1,7 @@
+# 2.2.0
+
+- AES padding is now optional with defaults to PKCS7.
+
 # 2.1.0
 
 - `secure-random` command-line tool.
