@@ -9,9 +9,10 @@ void main() {
 
   final parser = RSAKeyParser();
 
-  final RSAPublicKey publicKey = parser.parse(publicKeyFile.readAsStringSync());
-  final RSAPrivateKey privateKey =
-      parser.parse(privateKeyFile.readAsStringSync());
+  final publicKey =
+      parser.parse(publicKeyFile.readAsStringSync()) as RSAPublicKey;
+  final privateKey =
+      parser.parse(privateKeyFile.readAsStringSync()) as RSAPrivateKey;
 
   final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
   final encrypter =
