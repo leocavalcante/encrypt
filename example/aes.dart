@@ -5,10 +5,10 @@ void main() {
 
   final key = Key.fromLength(32);
   final iv = IV.fromLength(16);
-  final encrypter = Encrypter(AES(key, iv));
+  final encrypter = Encrypter(AES(key));
 
-  final encrypted = encrypter.encrypt(plainText);
-  final decrypted = encrypter.decrypt(encrypted);
+  final encrypted = encrypter.encrypt(plainText, iv: iv);
+  final decrypted = encrypter.decrypt(encrypted, iv: iv);
 
   print(decrypted);
   print(encrypted.bytes);

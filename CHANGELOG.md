@@ -1,3 +1,7 @@
+# 3.0.0
+
+- Enforce IV uniqueness.
+
 # 2.2.0
 
 - AES padding is now optional with defaults to PKCS7.

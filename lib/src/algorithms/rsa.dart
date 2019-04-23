@@ -15,7 +15,7 @@ class RSA extends Algorithm {
         this._privateKeyParameter = PrivateKeyParameter(privateKey);
 
   @override
-  Encrypted encrypt(Uint8List bytes) {
+  Encrypted encrypt(Uint8List bytes, {IV iv}) {
     if (publicKey == null) {
       throw StateError('Can\'t encrypt without a public key, null given.');
     }
@@ -28,7 +28,7 @@ class RSA extends Algorithm {
   }
 
   @override
-  Uint8List decrypt(Encrypted encrypted) {
+  Uint8List decrypt(Encrypted encrypted, {IV iv}) {
     if (privateKey == null) {
       throw StateError('Can\'t decrypt without a private key, null given.');
     }

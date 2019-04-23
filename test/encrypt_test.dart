@@ -27,15 +27,17 @@ void main() {
           'DIXikIUegcvoS6qSszWXgGkVga1GE6a+WkO24Srn1xtc9wtqN4QzWen95c7w2vy7NzMs+fQGPgQ5e/WesjaSng==',
     }.forEach((mode, encoded) {
       group('$mode', () {
-        final encrypter = Encrypter(AES(key, IV.fromLength(16), mode: mode));
+        final encrypter = Encrypter(AES(key, mode: mode));
         final encrypted = Encrypted(base64.decode(encoded));
 
         test('encrypt', () {
-          expect(encrypter.encrypt(text), equals(encrypted));
+          expect(encrypter.encrypt(text, iv: IV.fromLength(16)),
+              equals(encrypted));
         });
 
         test('decrypt', () {
-          expect(encrypter.decrypt(encrypted), equals(text));
+          expect(encrypter.decrypt(encrypted, iv: IV.fromLength(16)),
+              equals(text));
         });
       });
     });
@@ -52,16 +54,16 @@ void main() {
       AESMode.sic: 'DIXikIUegcvoS6qSszWXgA==',
     }.forEach((mode, encoded) {
       group('$mode', () {
-        final encrypter =
-            Encrypter(AES(key, IV.fromLength(16), mode: mode, padding: null));
+        final encrypter = Encrypter(AES(key, mode: mode, padding: null));
         final encrypted = Encrypted(base64.decode(encoded));
 
         test('encrypt', () {
-          expect(encrypter.encrypt(text), equals(encrypted));
+          expect(encrypter.encrypt(text, iv: IV.fromLength(16)),
+              equals(encrypted));
         });
 
         test('decrypt', () {
-          expect(encrypter.decrypt(encrypted),
+          expect(encrypter.decrypt(encrypted, iv: IV.fromLength(16)),
               equals(text.substring(0, encrypted.bytes.length)));
         });
       });
@@ -72,12 +74,18 @@ void main() {
     const encoded =
         '2FCmbbVYQrbLn8pkyPe4mt0ooqNRA8Dm9EmzZVSWgW+M/6FembxLmVdt9/JJt+NSMnx1hNjuOw==';
 
-    final encrypter = Encrypter(Salsa20(key, IV.fromLength(8)));
+    final encrypter = Encrypter(Salsa20(key));
     final encrypted = Encrypted(base64.decode(encoded));
 
-    test('encrypt', () => expect(encrypter.encrypt(text), equals(encrypted)));
+    test(
+        'encrypt',
+        () => expect(
+            encrypter.encrypt(text, iv: IV.fromLength(8)), equals(encrypted)));
 
-    test('decrypt', () => expect(encrypter.decrypt(encrypted), equals(text)));
+    test(
+        'decrypt',
+        () => expect(
+            encrypter.decrypt(encrypted, iv: IV.fromLength(8)), equals(text)));
   });
 
   group('RSA', () {

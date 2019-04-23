@@ -3,30 +3,30 @@ part of encrypt;
 /// Wraps the Salsa20 Engine.
 class Salsa20 implements Algorithm {
   final Key key;
-  final IV iv;
-  final ParametersWithIV<KeyParameter> _params;
 
   final Salsa20Engine _cipher = Salsa20Engine();
 
-  Salsa20(this.key, this.iv)
-      : _params =
-            ParametersWithIV<KeyParameter>(KeyParameter(key.bytes), iv.bytes);
+  Salsa20(this.key);
 
   @override
-  Encrypted encrypt(Uint8List bytes) {
+  Encrypted encrypt(Uint8List bytes, {IV iv}) {
     _cipher
       ..reset()
-      ..init(true, _params);
+      ..init(true, _buildParams(iv));
 
     return Encrypted(_cipher.process(bytes));
   }
 
   @override
-  Uint8List decrypt(Encrypted encrypted) {
+  Uint8List decrypt(Encrypted encrypted, {IV iv}) {
     _cipher
       ..reset()
-      ..init(false, _params);
+      ..init(false, _buildParams(iv));
 
     return _cipher.process(encrypted.bytes);
+  }
+
+  ParametersWithIV<KeyParameter> _buildParams(IV iv) {
+    return ParametersWithIV<KeyParameter>(KeyParameter(key.bytes), iv.bytes);
   }
 }

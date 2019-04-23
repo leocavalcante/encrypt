@@ -7,22 +7,23 @@ class Encrypter {
   Encrypter(this.algo);
 
   /// Calls [encrypt] on the wrapped Algorithm.
-  Encrypted encrypt(String input) {
-    return algo.encrypt(Uint8List.fromList(convert.utf8.encode(input)));
+  Encrypted encrypt(String input, {IV iv}) {
+    return algo.encrypt(Uint8List.fromList(convert.utf8.encode(input)), iv: iv);
   }
 
   /// Calls [decrypt] on the wrapped Algorithm.
-  String decrypt(Encrypted encrypted) {
-    return convert.utf8.decode(algo.decrypt(encrypted), allowMalformed: true);
+  String decrypt(Encrypted encrypted, {IV iv}) {
+    return convert.utf8
+        .decode(algo.decrypt(encrypted, iv: iv), allowMalformed: true);
   }
 
   /// Sugar for `decrypt(Encrypted.fromBase16(encoded))`.
-  String decrypt16(String encoded) {
-    return decrypt(Encrypted.fromBase16(encoded));
+  String decrypt16(String encoded, {IV iv}) {
+    return decrypt(Encrypted.fromBase16(encoded), iv: iv);
   }
 
   /// Sugar for `decrypt(Encrypted.fromBase64(encoded))`.
-  String decrypt64(String encoded) {
-    return decrypt(Encrypted.fromBase64(encoded));
+  String decrypt64(String encoded, {IV iv}) {
+    return decrypt(Encrypted.fromBase64(encoded), iv: iv);
   }
 }
