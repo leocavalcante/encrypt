@@ -5,10 +5,10 @@ void main() {
 
   final key = Key.fromLength(32);
   final iv = IV.fromLength(8);
-  final encrypter = Encrypter(Salsa20(key, iv));
+  final encrypter = Encrypter(Salsa20(key));
 
-  final encrypted = encrypter.encrypt(plainText);
-  final decrypted = encrypter.decrypt(encrypted);
+  final encrypted = encrypter.encrypt(plainText, iv: iv);
+  final decrypted = encrypter.decrypt(encrypted, iv: iv);
 
   print(decrypted);
   print(encrypted.bytes);

@@ -3,45 +3,53 @@ part of encrypt;
 /// Wraps the AES Algorithm.
 class AES implements Algorithm {
   final Key key;
-  final IV iv;
   final AESMode mode;
   final String padding;
-  final CipherParameters _params;
   final BlockCipher _cipher;
 
-  AES(this.key, this.iv, {this.mode = AESMode.sic, this.padding = 'PKCS7'})
+  AES(this.key, {this.mode = AESMode.sic, this.padding = 'PKCS7'})
       : _cipher = padding != null
             ? PaddedBlockCipher('AES/${_modes[mode]}/$padding')
-            : BlockCipher('AES/${_modes[mode]}'),
-        _params = padding == null
-            ? (mode == AESMode.ecb
-                ? KeyParameter(key.bytes)
-                : ParametersWithIV<KeyParameter>(
-                    KeyParameter(key.bytes), iv.bytes))
-            : PaddedBlockCipherParameters(
-                mode == AESMode.ecb
-                    ? KeyParameter(key.bytes)
-                    : ParametersWithIV<KeyParameter>(
-                        KeyParameter(key.bytes), iv.bytes),
-                null,
-              );
+            : BlockCipher('AES/${_modes[mode]}');
 
   @override
-  Encrypted encrypt(Uint8List bytes) {
+  Encrypted encrypt(Uint8List bytes, {IV iv}) {
     _cipher
       ..reset()
-      ..init(true, _params);
+      ..init(true, _buildParams(iv));
 
     return Encrypted(_cipher.process(bytes));
   }
 
   @override
-  Uint8List decrypt(Encrypted encrypted) {
+  Uint8List decrypt(Encrypted encrypted, {IV iv}) {
     _cipher
       ..reset()
-      ..init(false, _params);
+      ..init(false, _buildParams(iv));
 
     return _cipher.process(encrypted.bytes);
+  }
+
+  CipherParameters _buildParams(IV iv) {
+    if (padding != null) {
+      return _paddedParams(iv);
+    }
+
+    if (mode == AESMode.ecb) {
+      return KeyParameter(key.bytes);
+    }
+
+    return ParametersWithIV<KeyParameter>(KeyParameter(key.bytes), iv.bytes);
+  }
+
+  PaddedBlockCipherParameters _paddedParams(IV iv) {
+    if (mode == AESMode.ecb) {
+      return PaddedBlockCipherParameters(KeyParameter(key.bytes), null);
+    }
+
+    return PaddedBlockCipherParameters(
+        ParametersWithIV<KeyParameter>(KeyParameter(key.bytes), iv.bytes),
+        null);
   }
 }
 

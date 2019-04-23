@@ -14,10 +14,10 @@ A set of high-level APIs over PointyCastle for two-way cryptography.
 
 Acts like a Adapter interface for any algorithm. Exposes:
 
-- `Encrypted encrypt(String text)` encrypts the given plain-text.
-- `String decrypt(Encrypted encrypted)` decrypts the given `Encrypted` value.
-- `String decrypt16(String encoded)` sugar for `decrypt(Encrypted.fromBase16(encoded))`.
-- `String decrypt64(String encoded)` sugar for `decrypt(Encrypted.fromBase64(encoded))`.
+- `Encrypted encrypt(String text, {IV iv})` encrypts the given plain-text.
+- `String decrypt(Encrypted encrypted, {IV iv})` decrypts the given `Encrypted` value.
+- `String decrypt16(String encoded, {IV iv})` sugar for `decrypt(Encrypted.fromBase16(encoded))`.
+- `String decrypt64(String encoded, {IV iv})` sugar for `decrypt(Encrypted.fromBase64(encoded))`.
 
 ### Encrypted(Uint8List bytes)
 
@@ -101,10 +101,10 @@ void main() {
   final key = Key.fromUtf8('my 32 length key................');
   final iv = IV.fromLength(16);
 
-  final encrypter = Encrypter(AES(key, iv));
+  final encrypter = Encrypter(AES(key));
 
-  final encrypted = encrypter.encrypt(plainText);
-  final decrypted = encrypter.decrypt(encrypted);
+  final encrypted = encrypter.encrypt(plainText, iv: iv);
+  final decrypted = encrypter.decrypt(encrypted, iv: iv);
 
   print(decrypted); // Lorem ipsum dolor sit amet, consectetur adipiscing elit
   print(encrypted.base64); // R4PxiU3h8YoIRqVowBXm36ZcCeNeZ4s1OvVBTfFlZRdmohQqOpPQqD1YecJeZMAop/hZ4OxqgC1WtwvX/hP9mw==
@@ -116,7 +116,7 @@ void main() {
 Default mode is SIC `AESMode.sic`, you can override it using the `mode` named parameter:
 
 ```dart
-final encrypter = Encrypter(AES(key, iv, mode: AESMode.cbc));
+final encrypter = Encrypter(AES(key, mode: AESMode.cbc));
 }
 ```
 
@@ -139,10 +139,10 @@ void main() {
   final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
   final key = Key.fromLength(32);
   final iv = IV.fromLength(8);
-  final encrypter = Encrypter(Salsa20(key, iv));
+  final encrypter = Encrypter(Salsa20(key));
 
-  final encrypted = encrypter.encrypt(plainText);
-  final decrypted = encrypter.decrypt(encrypted);
+  final encrypted = encrypter.encrypt(plainText, iv: iv);
+  final decrypted = encrypter.decrypt(encrypted, iv: iv);
 
   print(decrypted); // Lorem ipsum dolor sit amet, consectetur adipiscing elit
   print(encrypted.base64); // CR+IAWBEx3sA/dLkkFM/orYr9KftrGa7lIFSAAmVPbKIOLDOzGwEi9ohstDBqDLIaXMEeulwXQ==
