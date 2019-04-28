@@ -45,7 +45,7 @@ class RSA extends Algorithm {
 class RSAKeyParser {
   /// Parses the PEM key no matter it is public or private, it will figure it out.
   RSAAsymmetricKey parse(String key) {
-    final rows = key.split('\n'); // LF-only, this could be a problem
+    final rows = key.split(RegExp(r'\r\n?|\n'));
     final header = rows.first;
 
     if (header == '-----BEGIN RSA PUBLIC KEY-----') {
@@ -64,8 +64,7 @@ class RSAKeyParser {
       return _parsePrivate(_pkcs8PrivateSequence(_parseSequence(rows)));
     }
 
-    // NOTE: Should we throw an exception?
-    return null;
+    throw FormatException('Unable to parse key, invalid format.', header);
   }
 
   RSAAsymmetricKey _parsePublic(ASN1Sequence sequence) {
