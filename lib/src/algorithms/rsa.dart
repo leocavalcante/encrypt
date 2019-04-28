@@ -64,7 +64,7 @@ class RSAKeyParser {
       return _parsePrivate(_pkcs8PrivateSequence(_parseSequence(rows)));
     }
 
-    throw ArgumentError('Unable to parse key, invalid format.');
+    throw FormatException('Unable to parse key, invalid format.', header);
   }
 
   RSAAsymmetricKey _parsePublic(ASN1Sequence sequence) {
