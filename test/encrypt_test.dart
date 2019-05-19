@@ -45,26 +45,33 @@ void main() {
 
   group('AES (no padding)', () {
     const <AESMode, String>{
-      AESMode.cbc: '2wZs4YD2LwIGF+tyC4kcHg==',
-      AESMode.cfb64: 'DIXikIUegcs=',
-      AESMode.ctr: 'DIXikIUegcvoS6qSszWXgA==',
-      AESMode.ecb: '2wZs4YD2LwIGF+tyC4kcHg==',
-      AESMode.ofb64Gctr: 'zOBn8gU5GXY=',
-      AESMode.ofb64: 'DIXikIUegcs=',
-      AESMode.sic: 'DIXikIUegcvoS6qSszWXgA==',
+      AESMode.cbc:
+          '2wZs4YD2LwIGF+tyC4kcHocGhO/6jh5ajv+QnzdUSeU54YAVXVO7t1nw3GTbHbQNNh/ViBlFFQZ0nMTBMcWqGw==',
+      AESMode.cfb64:
+          'DIXikIUegcuzesmInMboN5gdeD6bwV082kZl+lXFGZJCIti39JSobQ0iEvsnTPSvyuDZ+d3HxVCKVva0YfIp3w==',
+      AESMode.ctr:
+          'DIXikIUegcvoS6qSszWXgGkVga1GE6a+WkO24Srn1xtc9wtqN4QzWen95c7w2vy7NzMs+fQGPi0QUty3mx+7tw==',
+      AESMode.ecb:
+          '2wZs4YD2LwIGF+tyC4kcHvzEiyF8uDJygSqO/jsw5+rkNz3c7eTqd72ud9Em2VRXmh2wAvbvFo4pO2LVwwW9og==',
+      AESMode.ofb64Gctr:
+          'zOBn8gU5GXZ7LSrPcSs8ejAzOxL0DKfFoZtG2a3NqNbyJqTIDmKPfau3Yl3/l7X4iotfYKULTTDrH+mnJ0rm7w==',
+      AESMode.ofb64:
+          'DIXikIUegcuyEelB4En11TiUpnGRJNvFZIr3oxcCQ2XlYoplQpVYOrPOLCfvJ3P04kS9s/rITHCDPcjZ7QT28g==',
+      AESMode.sic:
+          'DIXikIUegcvoS6qSszWXgGkVga1GE6a+WkO24Srn1xtc9wtqN4QzWen95c7w2vy7NzMs+fQGPi0QUty3mx+7tw==',
     }.forEach((mode, encoded) {
       group('$mode', () {
         final encrypter = Encrypter(AES(key, mode: mode, padding: null));
         final encrypted = Encrypted(base64.decode(encoded));
 
         test('encrypt', () {
-          expect(encrypter.encrypt(text, iv: IV.fromLength(16)),
+          expect(encrypter.encrypt(text.padRight(64), iv: IV.fromLength(16)),
               equals(encrypted));
         });
 
         test('decrypt', () {
           expect(encrypter.decrypt(encrypted, iv: IV.fromLength(16)),
-              equals(text.substring(0, encrypted.bytes.length)));
+              equals(text.padRight(64)));
         });
       });
     });

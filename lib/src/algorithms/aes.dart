@@ -18,6 +18,10 @@ class AES implements Algorithm {
       ..reset()
       ..init(true, _buildParams(iv));
 
+    if (padding == null) {
+      return Encrypted(_processBlocks(bytes));
+    }
+
     return Encrypted(_cipher.process(bytes));
   }
 
@@ -27,7 +31,21 @@ class AES implements Algorithm {
       ..reset()
       ..init(false, _buildParams(iv));
 
+    if (padding == null) {
+      return _processBlocks(encrypted.bytes);
+    }
+
     return _cipher.process(encrypted.bytes);
+  }
+
+  Uint8List _processBlocks(Uint8List input) {
+    var output = Uint8List(input.lengthInBytes);
+
+    for (int offset = 0; offset < input.lengthInBytes;) {
+      offset += _cipher.processBlock(input, offset, output, offset);
+    }
+
+    return output;
   }
 
   CipherParameters _buildParams(IV iv) {
