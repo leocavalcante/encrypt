@@ -1,3 +1,9 @@
+# 3.1.0
+
+- Add support for CRLF PEM keys
+- Fix AES without padding.
+- Add `encryptBytes` method.
+
 # 3.0.0
 
 - Enforce IV uniqueness.
