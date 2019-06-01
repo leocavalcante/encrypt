@@ -104,7 +104,14 @@ void main() {
         .parse(File('test/private.pem').readAsStringSync()) as RSAPrivateKey;
 
     final encrypter =
-        Encrypter(RSA(publicKey: publicKey, privateKey: privateKey));
+      Encrypter(RSA(publicKey: publicKey, privateKey: privateKey));
+//    final encrypter =
+//      Encrypter(RSA(publicKey: publicKey, privateKey: privateKey, padding: RSASecPadding.None));
+//    final encrypter =
+//      Encrypter(RSA(publicKey: publicKey, privateKey: privateKey, padding: RSASecPadding.PKCS1));
+//    final encrypter =
+//      Encrypter(RSA(publicKey: publicKey, privateKey: privateKey, padding: RSASecPadding.OAEPE));
+
     final encrypted = encrypter.encrypt(text);
 
     test('encrypt/decrypt', () {

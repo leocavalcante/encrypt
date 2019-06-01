@@ -8,11 +8,13 @@ class RSA extends Algorithm {
   final PublicKeyParameter<RSAPublicKey> _publicKeyParams;
   final PrivateKeyParameter<RSAPrivateKey> _privateKeyParameter;
 
-  final AsymmetricBlockCipher _cipher = PKCS1Encoding(RSAEngine());
+  final RSASecPadding padding;
+  final AsymmetricBlockCipher _cipher;
 
-  RSA({this.publicKey, this.privateKey})
+  RSA({this.publicKey, this.privateKey, this.padding = RSASecPadding.PKCS1})
       : this._publicKeyParams = PublicKeyParameter(publicKey),
-        this._privateKeyParameter = PrivateKeyParameter(privateKey);
+        this._privateKeyParameter = PrivateKeyParameter(privateKey),
+        this._cipher = RSA.cipher(padding);
 
   @override
   Encrypted encrypt(Uint8List bytes, {IV iv}) {
@@ -38,6 +40,18 @@ class RSA extends Algorithm {
       ..init(false, _privateKeyParameter);
 
     return _cipher.process(encrypted.bytes);
+  }
+
+  static AsymmetricBlockCipher cipher(RSASecPadding padding) {
+    switch (padding) {
+      case RSASecPadding.None:
+        return RSAEngine();
+      case RSASecPadding.OAEPE:
+        return OAEPEncoding(RSAEngine());
+      case RSASecPadding.PKCS1:
+      default:
+        return PKCS1Encoding(RSAEngine());
+    }
   }
 }
 
@@ -111,4 +125,10 @@ class RSAKeyParser {
 
     return parser.nextObject() as ASN1Sequence;
   }
+}
+
+enum RSASecPadding {
+  None,
+  PKCS1,
+  OAEPE,
 }
