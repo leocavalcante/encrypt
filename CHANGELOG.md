@@ -1,6 +1,12 @@
+# 3.2.0
+
+- Fix wrong casting.
+- Add decryptBytes, avoids UTF-8 high coupling.
+- Add public decryption and private encryption for digital signature verification.
+
 # 3.1.0
 
-- Add support for CRLF PEM keys
+- Add support for CRLF PEM keys.
 - Fix AES without padding.
 - Add `encryptBytes` method.
 

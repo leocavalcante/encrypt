@@ -5,4 +5,3 @@ build/
 doc/api/
 example/issue_*.dart
 example/local.dart
-pubspec.lock
