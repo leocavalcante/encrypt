@@ -16,10 +16,15 @@ class Encrypter {
     return encryptBytes(convert.utf8.encode(input), iv: iv);
   }
 
+  /// Calls [decrypt] on the wrapped Algorith without UTF-8 decoding.
+  List<int> decryptBytes(Encrypted encrypted, {IV iv}) {
+    return algo.decrypt(encrypted, iv: iv).toList();
+  }
+
   /// Calls [decrypt] on the wrapped Algorithm.
   String decrypt(Encrypted encrypted, {IV iv}) {
     return convert.utf8
-        .decode(algo.decrypt(encrypted, iv: iv), allowMalformed: true);
+        .decode(decryptBytes(encrypted, iv: iv), allowMalformed: true);
   }
 
   /// Sugar for `decrypt(Encrypted.fromBase16(encoded))`.
