@@ -1,5 +1,5 @@
 name: encrypt
-version: 3.1.0
+version: 3.1.0+1
 description: A set of high-level APIs over PointyCastle for two-way cryptography.
 author: leocavalcante <lc@leocavalcante.com>
 homepage: https://github.com/leocavalcante/encrypt
@@ -14,7 +14,7 @@ dependencies:
   asn1lib: ^0.5.8
   collection: ^1.14.11
   pointycastle: ^1.0.1
-  args: ^1.5.1
+  args: ^1.5.2
 
 dev_dependencies:
-  test: ^1.5.1+1
+  test: ^1.6.4
