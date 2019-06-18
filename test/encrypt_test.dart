@@ -122,5 +122,15 @@ void main() {
         expect(() => badStateEncrypter.decrypt(encrypted), throwsStateError);
       });
     });
+
+    group('Signature', () {
+      final encrypter = Encrypter(
+          RSA(publicKey: publicKey, privateKey: privateKey, isSignature: true));
+      final encrypted = encrypter.encrypt(text);
+
+      test('encrypt/decrypt', () {
+        expect(encrypter.decrypt(encrypted), equals(text));
+      });
+    });
   });
 }
