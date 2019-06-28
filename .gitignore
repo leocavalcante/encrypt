@@ -3,5 +3,5 @@
 .pub/
 build/
 doc/api/
-example/issue_*.dart
+example/issue_*
 example/local.dart
