@@ -8,6 +8,10 @@ class Encrypter {
 
   /// Calls [encrypt] on the wrapped Algorithm using a raw binary.
   Encrypted encryptBytes(List<int> input, {IV iv}) {
+    if (input is Uint8List) {
+      return algo.encrypt(input, iv: iv);
+    }
+
     return algo.encrypt(Uint8List.fromList(input), iv: iv);
   }
 
