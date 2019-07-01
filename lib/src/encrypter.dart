@@ -38,9 +38,9 @@ class Encrypter {
   }
 }
 
-Future<RSAAsymmetricKey> parseKeyFromFile(String filename) async {
+Future<T> parseKeyFromFile<T extends RSAAsymmetricKey>(String filename) async {
   final file = File(filename);
   final key = await file.readAsString();
   final parser = RSAKeyParser();
-  return parser.parse(key);
+  return parser.parse(key) as T;
 }

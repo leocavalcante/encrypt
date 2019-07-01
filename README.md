@@ -159,21 +159,17 @@ import 'package:encrypt/encrypt.dart';
 import 'package:pointycastle/asymmetric/api.dart';
 
 void main() {
-  final publicKeyFile = File('/path/to/public_key.pem');
-  final privateKeyFile = File('/path/to/private_key.pem');
-
-  final parser = RSAKeyParser();
-  final RSAPublicKey publicKey = parser.parse(publicKeyFile.readAsStringSync());
-  final RSAPrivateKey privateKey = parser.parse(privateKeyFile.readAsStringSync());
+  final publicKey = await parseKeyFromFile<RSAPublicKey>('test/public.pem');
+  final privKey = await parseKeyFromFile<RSAPrivateKey>('test/private.pem');
 
   final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
-  final encrypter = Encrypter(RSA(publicKey: publicKey, privateKey: privateKey));
+  final encrypter = Encrypter(RSA(publicKey: publicKey, privateKey: privKey));
 
   final encrypted = encrypter.encrypt(plainText);
   final decrypted = encrypter.decrypt(encrypted);
 
   print(decrypted); // Lorem ipsum dolor sit amet, consectetur adipiscing elit
-  print(encrypted.base64); // XWMuHTeO86gC6SsUh14h+jc4iQW7Vy0TDaBKN926QWhg5c3KKoSuF+6uedLWBEis0LYgTON2rhtTOjmb6bU2P27lgf+5JKdLGKqri2F4sCS3+/p/EPb41f60vnr3whX2o5VRJhJagxtrq0V3eu3X4UeRiO2y7yOt6MXyJxMFcXs=
+  print(encrypted.base64); // kO9EbgbrSwiq0EYz0aBdljHSC/rci2854Qa+nugbhKjidlezNplsEqOxR+pr1RtICZGAtv0YGevJBaRaHS17eHuj7GXo1CM3PR6pjGxrorcwR5Q7/bVEePESsimMbhHWF+AkDIX4v0CwKx9lgaTBgC8/yJKiLmQkyDCj64J3JSE=
 }
 ```
 
