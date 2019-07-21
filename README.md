@@ -84,7 +84,7 @@ $ secure-random --help
 Current status is:
 
 - AES with PKCS7 padding
-- RSA with PKCS1 encoding
+- RSA with PKCS1 and OAEP encoding
 - Salsa20
 
 ## Usage
