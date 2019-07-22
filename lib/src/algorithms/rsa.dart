@@ -9,11 +9,18 @@ class RSA extends Algorithm {
   final PublicKeyParameter<RSAPublicKey> _publicKeyParams;
   final PrivateKeyParameter<RSAPrivateKey> _privateKeyParams;
 
-  final AsymmetricBlockCipher _cipher = PKCS1Encoding(RSAEngine());
+  final AsymmetricBlockCipher _cipher;
 
-  RSA({this.publicKey, this.privateKey, this.isSignature = false})
-      : this._publicKeyParams = PublicKeyParameter(publicKey),
-        this._privateKeyParams = PrivateKeyParameter(privateKey);
+  RSA({
+    this.publicKey,
+    this.privateKey,
+    this.isSignature = false,
+    RSAEncoding encoding = RSAEncoding.PKCS1,
+  })  : this._publicKeyParams = PublicKeyParameter(publicKey),
+        this._privateKeyParams = PrivateKeyParameter(privateKey),
+        this._cipher = encoding == RSAEncoding.OAEP
+            ? OAEPEncoding(RSAEngine())
+            : PKCS1Encoding(RSAEngine());
 
   @override
   Encrypted encrypt(Uint8List bytes, {IV iv}) {
@@ -40,6 +47,11 @@ class RSA extends Algorithm {
 
     return _cipher.process(encrypted.bytes);
   }
+}
+
+enum RSAEncoding {
+  PKCS1,
+  OAEP,
 }
 
 /// RSA PEM parser.
