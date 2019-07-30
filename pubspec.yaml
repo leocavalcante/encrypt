@@ -15,6 +15,7 @@ dependencies:
   collection: ^1.14.11
   pointycastle: ^1.0.1
   args: ^1.5.2
+  clock: ^1.0.1
 
 dev_dependencies:
   test: ^1.6.4

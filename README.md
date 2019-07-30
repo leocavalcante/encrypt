@@ -149,6 +149,28 @@ void main() {
 }
 ```
 
+#### [Fernet](https://github.com/fernet/spec/blob/master/Spec.md)
+
+```dart
+import 'package:encrypt/encrypt.dart';
+import 'dart:convert';
+
+void main() {
+  final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
+  final key = Key.fromUtf8('my32lengthsupersecretnooneknows1');
+  final iv = IV.fromLength(16);
+
+  final b64key = Key.fromUtf8(base64Url.encode(key.bytes));
+  final encrypter = Encrypter(Fernet(b64key));
+
+  final encrypted = encrypter.encrypt(plainText);
+  final decrypted = encrypter.decrypt(encrypted);
+
+  print(decrypted); // Lorem ipsum dolor sit amet, consectetur adipiscing elit
+  print(encrypted.base64); // random cipher text
+}
+```
+
 ### Asymmetric
 
 #### RSA
