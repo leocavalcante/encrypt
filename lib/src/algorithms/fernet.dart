@@ -39,10 +39,7 @@ class Fernet implements Algorithm {
     if (data.first != 0x80) {
       throw StateError('Invalid token');
     }
-    final tsBytes = data.sublist(1, 9);
-    var buffer = Uint8List.fromList(tsBytes).buffer;
-    var bdata = ByteData.view(buffer);
-    final ts = bdata.getUint64(0, Endian.big);
+    final ts = extractTimestamp(data);
     final now = (_clock.now().millisecondsSinceEpoch / 1000).round();
     if (ttl != null && ts + ttl < now) {
       throw StateError('Invalid token');
@@ -61,6 +58,13 @@ class Fernet implements Algorithm {
     final aes = AES(_encryptionKey, mode: AESMode.cbc);
     final decrypted = aes.decrypt(ciphertext, iv: iv);
     return decrypted;
+  }
+
+  int extractTimestamp(Uint8List data) {
+    final tsBytes = data.sublist(1, 9);
+    var buffer = Uint8List.fromList(tsBytes).buffer;
+    var bdata = ByteData.view(buffer);
+    return bdata.getUint64(0, Endian.big);
   }
 
   void _verify_signature(Uint8List data) {

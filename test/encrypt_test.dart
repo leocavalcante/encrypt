@@ -14,8 +14,8 @@ void main() {
     final currentDateTime =
         DateTime.fromMillisecondsSinceEpoch(1565106118 * 1000);
     final b64key = Key.fromUtf8(base64Url.encode(key.bytes));
-    final encrypter =
-        Encrypter(Fernet(b64key, clock: Clock.fixed(currentDateTime)));
+    final fernet = Fernet(b64key, clock: Clock.fixed(currentDateTime));
+    final encrypter = Encrypter(fernet);
     final encrypted = Encrypted(base64.decode(
         'gAAAAABdSZ_GAAAAAAAAAAAAAAAAAAAAAP-kE5Zs_CyDB-8I8c26Iz9B78L6hleGlXZmqEjZh107U3ny9yRp8QUAc243_B7q0ZtFFs0xAoJDveTPXwTwvzCwXEd8I9NZ1fZeknZmJkEPRxEsJBh9K5QrqjR8B0Shyg=='));
     final iv = IV.fromLength(16);
@@ -27,6 +27,7 @@ void main() {
     });
     test('decrypt', () {
       expect(encrypter.decrypt(encrypted), equals(text));
+      expect(fernet.extractTimestamp(encrypted.bytes), equals(1565106118));
     });
   });
 
