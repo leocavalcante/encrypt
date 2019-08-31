@@ -3,7 +3,7 @@ part of encrypt;
 /// Wraps the Fernet Algorithm.
 class Fernet implements Algorithm {
   final _maxClockSkew = 60;
-  final _randomGenerator = Random.secure();
+
   Key _signKey;
   Key _encryptionKey;
   Clock _clock;
@@ -26,7 +26,7 @@ class Fernet implements Algorithm {
   @override
   Encrypted encrypt(Uint8List bytes, {IV iv}) {
     if (iv == null) {
-      iv = _generateIV();
+      iv = IV.fromSecureRandom(16);
     }
     int currentTime = (_clock.now().millisecondsSinceEpoch / 1000).round();
     final encryptedBytes = _encryptFromParts(bytes, currentTime, iv);
@@ -47,7 +47,7 @@ class Fernet implements Algorithm {
     if (now + _maxClockSkew < ts) {
       throw StateError('Invalid token');
     }
-    _verify_signature(data);
+    _verifySignature(data);
     if (iv != null) {
       throw StateError('IV must be infered from token');
     }
@@ -67,7 +67,7 @@ class Fernet implements Algorithm {
     return bdata.getUint64(0, Endian.big);
   }
 
-  void _verify_signature(Uint8List data) {
+  void _verifySignature(Uint8List data) {
     final length = data.length;
     final parts = data.sublist(0, length - 32);
     final _digest = data.sublist(length - 32);
@@ -76,11 +76,6 @@ class Fernet implements Algorithm {
     if (!ListEquality().equals(_digest, digest_)) {
       throw StateError('Invalid token');
     }
-  }
-
-  IV _generateIV() {
-    final bs = List.generate(16, (_) => _randomGenerator.nextInt(255));
-    return IV(Uint8List.fromList(bs));
   }
 
   Uint8List _encryptFromParts(Uint8List bytes, int currentTime, IV iv) {
