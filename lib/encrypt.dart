@@ -22,3 +22,4 @@ part 'src/algorithms/rsa.dart';
 part 'src/algorithms/salsa20.dart';
 part 'src/encrypted.dart';
 part 'src/encrypter.dart';
+part 'src/secure_random.dart';

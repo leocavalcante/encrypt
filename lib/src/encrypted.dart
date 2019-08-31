@@ -54,6 +54,7 @@ class IV extends Encrypted {
   IV.fromBase64(String encoded) : super.fromBase64(encoded);
   IV.fromUtf8(String input) : super.fromUtf8(input);
   IV.fromLength(int length) : super.fromLength(length);
+  IV.fromSecureRandom(int length) : super(SecureRandom(length).bytes);
 }
 
 /// Represents an Encryption Key.
@@ -63,6 +64,7 @@ class Key extends Encrypted {
   Key.fromBase64(String encoded) : super.fromBase64(encoded);
   Key.fromUtf8(String input) : super.fromUtf8(input);
   Key.fromLength(int length) : super.fromLength(length);
+  Key.fromSecureRandom(int length) : super(SecureRandom(length).bytes);
 
   Key strech(int desiredKeyLength, {int iterationCount = 100, Uint8List salt}) {
     if (salt == null) {
