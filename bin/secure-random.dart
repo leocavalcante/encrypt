@@ -1,7 +1,5 @@
-import 'dart:convert';
-import 'dart:math';
-
 import 'package:args/args.dart';
+import 'package:encrypt/encrypt.dart';
 
 void main(List<String> args) {
   final argParser = ArgParser();
@@ -27,16 +25,15 @@ void main(List<String> args) {
     return print(argParser.usage);
   }
 
-  final random = Random.secure();
-  final bytes = List.generate(length, (i) => random.nextInt(2 ^ 32));
+  final secureRandom = SecureRandom(length);
 
   switch (base) {
     case 64:
-      print(base64.encode(bytes));
+      print(secureRandom.base64);
       break;
 
     case 16:
-      print(bytes.map((byte) => byte.toRadixString(16).padLeft(2, '0')).join());
+      print(secureRandom.base16);
       break;
 
     default:
