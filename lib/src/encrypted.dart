@@ -75,12 +75,10 @@ class Key extends Encrypted {
   Key.fromLength(int length) : super.fromLength(length);
   Key.fromSecureRandom(int length) : super(SecureRandom(length).bytes);
 
-  Key strech(int desiredKeyLength, {int iterationCount = 100, Uint8List salt}) {
+  Key stretch(int desiredKeyLength,
+      {int iterationCount = 100, Uint8List salt}) {
     if (salt == null) {
-      // TODO: Use SecureRandom after #71 merge
-      final random = Random.secure();
-      salt = Uint8List.fromList(
-          List.generate(desiredKeyLength, (_) => random.nextInt(2 ^ 32)));
+      salt = SecureRandom(desiredKeyLength).bytes;
     }
 
     final params = Pbkdf2Parameters(salt, iterationCount, desiredKeyLength);

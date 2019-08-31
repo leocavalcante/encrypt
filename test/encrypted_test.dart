@@ -34,7 +34,7 @@ void main() {
       final desiredLength = 32;
       final salt = Uint8List(16);
       final shortKey = Key.fromUtf8('short');
-      final strechedKey = shortKey.strech(desiredLength, salt: salt);
+      final strechedKey = shortKey.stretch(desiredLength, salt: salt);
 
       expect(strechedKey.bytes.length, equals(desiredLength));
       expect(strechedKey.base64,
