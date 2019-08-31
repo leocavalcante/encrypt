@@ -63,4 +63,18 @@ class Key extends Encrypted {
   Key.fromBase64(String encoded) : super.fromBase64(encoded);
   Key.fromUtf8(String input) : super.fromUtf8(input);
   Key.fromLength(int length) : super.fromLength(length);
+
+  Key strech(int desiredKeyLength, {int iterationCount = 100, Uint8List salt}) {
+    if (salt == null) {
+      // TODO: Use SecureRandom after #71 merge
+      final random = Random.secure();
+      salt = Uint8List.fromList(
+          List.generate(desiredKeyLength, (_) => random.nextInt(2 ^ 32)));
+    }
+
+    final params = Pbkdf2Parameters(salt, iterationCount, desiredKeyLength);
+    final pbkdf2 = PBKDF2KeyDerivator(Mac('SHA-1/HMAC'))..init(params);
+
+    return Key(pbkdf2.process(_bytes));
+  }
 }

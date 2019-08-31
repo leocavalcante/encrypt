@@ -2,6 +2,7 @@ library encrypt;
 
 import 'dart:convert' as convert;
 import 'dart:io';
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:asn1lib/asn1lib.dart';
@@ -11,6 +12,8 @@ import 'package:pointycastle/asymmetric/api.dart';
 import 'package:pointycastle/asymmetric/oaep.dart';
 import 'package:pointycastle/asymmetric/pkcs1.dart';
 import 'package:pointycastle/asymmetric/rsa.dart';
+import 'package:pointycastle/export.dart';
+import 'package:pointycastle/key_derivators/api.dart';
 import 'package:pointycastle/stream/salsa20.dart';
 
 part 'src/algorithm.dart';
