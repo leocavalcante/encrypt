@@ -1,7 +1,6 @@
 library encrypt;
 
 import 'dart:convert' as convert;
-import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 

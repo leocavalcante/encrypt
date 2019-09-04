@@ -41,10 +41,3 @@ class Encrypter {
     return decrypt(Encrypted.fromBase64(encoded), iv: iv);
   }
 }
-
-Future<T> parseKeyFromFile<T extends RSAAsymmetricKey>(String filename) async {
-  final file = File(filename);
-  final key = await file.readAsString();
-  final parser = RSAKeyParser();
-  return parser.parse(key) as T;
-}
