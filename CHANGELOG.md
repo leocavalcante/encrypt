@@ -1,3 +1,7 @@
+# 3.3.1
+
+- Move I/O helper to another lib
+
 # 3.3.0
 
 - Added the Fernet algorithm, thanks to [@timfeirg](https://github.com/timfeirg)
