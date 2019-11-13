@@ -6,7 +6,7 @@ class SecureRandom {
 
   SecureRandom(int length)
       : _bytes = Uint8List.fromList(
-            List.generate(length, (i) => _generator.nextInt(2 ^ 32)));
+            List.generate(length, (i) => _generator.nextInt(256)));
 
   Uint8List get bytes => _bytes;
 
