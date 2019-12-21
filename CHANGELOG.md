@@ -1,3 +1,7 @@
+# 4.0.0
+
+- Digital signatures signing and verification.
+
 # 3.3.1
 
 - Move I/O helper to another lib

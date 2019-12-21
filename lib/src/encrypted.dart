@@ -20,6 +20,9 @@ class Encrypted {
   Encrypted.fromBase64(String encoded)
       : _bytes = convert.base64.decode(encoded);
 
+  /// Creates an Encrypted object from a Base64 string.
+  Encrypted.from64(String encoded) : _bytes = convert.base64.decode(encoded);
+
   /// Creates an Encrypted object from a UTF-8 string.
   Encrypted.fromUtf8(String input)
       : _bytes = Uint8List.fromList(convert.utf8.encode(input));

@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:clock/clock.dart';
 import 'dart:io';
 
+import 'package:clock/clock.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:pointycastle/asymmetric/api.dart';
 import 'package:test/test.dart';
@@ -144,16 +144,6 @@ void main() {
       test('decrypt', () {
         final encrypted = Encrypted.fromLength(0);
         expect(() => badStateEncrypter.decrypt(encrypted), throwsStateError);
-      });
-    });
-
-    group('Signature', () {
-      final encrypter = Encrypter(
-          RSA(publicKey: publicKey, privateKey: privateKey, isSignature: true));
-      final encrypted = encrypter.encrypt(text);
-
-      test('encrypt/decrypt', () {
-        expect(encrypter.decrypt(encrypted), equals(text));
       });
     });
   });
