@@ -138,7 +138,7 @@ class RSASigner extends AbstractRSA implements SignerAlgorithm {
 
   Uint8List _encode(Uint8List hash) {
     final digestBytes =
-    Uint8List(2 + 2 + _digestId.length + 2 + 2 + hash.length);
+        Uint8List(2 + 2 + _digestId.length + 2 + 2 + hash.length);
     var i = 0;
 
     digestBytes[i++] = 48;
