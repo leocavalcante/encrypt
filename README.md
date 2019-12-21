@@ -8,47 +8,6 @@ A set of high-level APIs over PointyCastle for two-way cryptography.
 
 > Looking for password hashing? Please, visit [password](https://github.com/leocavalcante/password-dart).
 
-## API Overview
-
-### Encrypter(Algorithm algo)
-
-Acts like a Adapter interface for any algorithm. Exposes:
-
-- `Encrypted encrypt(String text, {IV iv})` encrypts the given plain-text.
-- `String decrypt(Encrypted encrypted, {IV iv})` decrypts the given `Encrypted` value.
-- `String decrypt16(String encoded, {IV iv})` sugar for `decrypt(Encrypted.fromBase16(encoded))`.
-- `String decrypt64(String encoded, {IV iv})` sugar for `decrypt(Encrypted.fromBase64(encoded))`.
-
-### Encrypted(Uint8List bytes)
-
-Wraps the encrypted bytes. Exposes:
-
-- `Encrypted.fromBase16(String encoded)` creates an Encrypted object from a hexdecimal string.
-- `Encrypted.fromBase64(String encoded)` creates an Encrypted object from a Base64 string.
-- `String base16` returns a hexdecimal representation of the bytes.
-- `String base64` returns a Base64 representation of the bytes.
-- `Uint8List bytes` returns raw bytes.
-
-### Key(Uint8List bytes)
-
-Represents an Encryption Key. Exposes:
-
-- `Key.fromBase16(String encoded)` creates a Key from a hexdecimal string.
-- `Key.fromBase64(String encoded)` creates a Key from a Base64 string.
-- `Key.fromUtf8(String encoded)` creates a Key from a UTF-8 string.
-- `Key.fromLength(int length)` sugar for `Key(Uint8List(length))`.
-
-### IV(Uint8List bytes)
-
-Represents an Initialization Vector https://en.wikipedia.org/wiki/Initialization_vector. Exposes:
-
-- `IV.fromBase16(String encoded)` creates an IV from a hexdecimal string.
-- `IV.fromBase64(String encoded)` creates an IV from a Base64 string.
-- `IV.fromUtf8(String encoded)` creates an IV from a UTF-8 string.
-- `IV.fromLength(int length)` sugar for `IV(Uint8List(length))`.
-
-## Utils
-
 ### Secure random
 
 You can generate cryptographically secure random keys and IVs for you project.
@@ -86,6 +45,10 @@ Current status is:
 - AES with PKCS7 padding
 - RSA with PKCS1 and OAEP encoding
 - Salsa20
+
+### Signing
+
+- SHA256 with RSA
 
 ## Usage
 
@@ -198,7 +161,15 @@ void main() {
 }
 ```
 
-##### Note
+### Signature and verification
 
-If you are just encrypting or just decrypting, you can ignore the respectives `privateKey` and `publicKey`.
-Trying the encrypt without a public key or decrypt without a private key will throw a `StateError`.
+#### RSA
+
+```dart
+ final publicKey = await parseKeyFromFile<RSAPublicKey>('test/public.pem');
+ final privateKey = await parseKeyFromFile<RSAPrivateKey>('test/private.pem');
+ final signer = Signer(RSASigner(RSASignDigest.SHA256, publicKey: publicKey, privateKey: privateKey));
+
+ print(signer.sign('hello world').base64);
+ print(signer.verify(Encrypted.from64('jfMhNM2v6hauQr6w3ji0xNOxGInHbeIH3DHlpf2W3vmSMyAuwGHG0KLcunggG4XtZrZPAib7oHaKEAdkHaSIGXAtEqaAvocq138oJ7BEznA4KVYuMcW9c8bRy5E4tUpikTpoO+okHdHr5YLc9y908CAQBVsfhbt0W9NClvDWegs=')));
+```
