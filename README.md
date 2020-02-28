@@ -15,7 +15,7 @@ You can generate cryptographically secure random keys and IVs for you project.
 Activate the encrypt package:
 
 ```bash
-pub global active encrypt
+pub global activate encrypt
 ```
 
 Then use the `secure-random` command-line tool:
