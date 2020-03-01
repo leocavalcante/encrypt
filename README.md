@@ -74,13 +74,12 @@ void main() {
 }
 ```
 
-##### Mode of operation
+##### Modes of operation
 
 Default mode is SIC `AESMode.sic`, you can override it using the `mode` named parameter:
 
 ```dart
 final encrypter = Encrypter(AES(key, mode: AESMode.cbc));
-}
 ```
 
 ###### Supported modes are:
@@ -92,6 +91,14 @@ final encrypter = Encrypter(AES(key, mode: AESMode.cbc));
 - OFB-64/GCTR `AESMode.ofb64Gctr`
 - OFB-64 `AESMode.ofb64`
 - SIC `AESMode.sic`
+
+##### No/zero padding 
+
+To remove padding, pass `null` to the `padding` named parameter on the constructor:
+
+```dart
+final encrypter = Encrypter(AES(key, mode: AESMode.cbc, padding: null));
+```
 
 #### Salsa20
 
