@@ -253,8 +253,11 @@ class RSAKeyParser {
   }
 }
 
-Uint8List _hexToBytes(String encoded) => Uint8List.fromList(List.generate(
-        encoded.length, (i) => i % 2 == 0 ? encoded.substring(i, i + 2) : null)
-    .where((b) => b != null)
-    .map((b) => int.parse(b, radix: 16))
-    .toList());
+Uint8List _hexToBytes(String encoded) => (
+  Uint8List.fromList(
+    List.generate(encoded.length, (i) => i % 2 == 0 ? encoded.substring(i, i + 2) : null)
+      .where((b) => b != null)
+      .map((b) => int.parse(b, radix: 16))
+      .toList()
+  )
+);
