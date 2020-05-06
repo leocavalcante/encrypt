@@ -48,15 +48,6 @@ class Encrypted {
 
     return false;
   }
-
-  /// Populated by underlying algorithms
-  Map _meta;
-  void set meta(Map m) {
-    if (_meta != null) {
-      throw UnsupportedError('Cannot modify meta once initialized');
-    }
-    _meta = Map.unmodifiable(m);
-  }
 }
 
 /// Represents an Initialization Vector.
