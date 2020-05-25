@@ -6,36 +6,56 @@ class AES implements Algorithm {
   final AESMode mode;
   final String padding;
   final BlockCipher _cipher;
+  final StreamCipher _streamCipher;
 
   AES(this.key, {this.mode = AESMode.sic, this.padding = 'PKCS7'})
       : _cipher = padding != null
             ? PaddedBlockCipher('AES/${_modes[mode]}/$padding')
-            : BlockCipher('AES/${_modes[mode]}');
+            : BlockCipher('AES/${_modes[mode]}'),
+        _streamCipher = padding == null && _streamable.contains(mode)
+            ? StreamCipher('AES/${_modes[mode]}')
+            : null;
 
   @override
   Encrypted encrypt(Uint8List bytes, {IV iv}) {
+    if (_streamCipher != null) {
+      _streamCipher
+        ..reset()
+        ..init(true, _buildParams(iv));
+
+      return Encrypted(_streamCipher.process(bytes));
+    }
+
     _cipher
       ..reset()
       ..init(true, _buildParams(iv));
 
-    if (padding == null) {
-      return Encrypted(_processBlocks(bytes));
+    if (padding != null) {
+      return Encrypted(_cipher.process(bytes));
     }
 
-    return Encrypted(_cipher.process(bytes));
+    return Encrypted(_processBlocks(bytes));
   }
 
   @override
   Uint8List decrypt(Encrypted encrypted, {IV iv}) {
+    if (_streamCipher != null) {
+      _streamCipher
+        ..reset()
+        ..init(false, _buildParams(iv));
+
+      return _streamCipher.process(encrypted.bytes);
+    }
+
     _cipher
       ..reset()
       ..init(false, _buildParams(iv));
 
-    if (padding == null) {
-      return _processBlocks(encrypted.bytes);
+    if (padding != null) {
+      return _cipher.process(encrypted.bytes);
     }
 
-    return _cipher.process(encrypted.bytes);
+    return _processBlocks(encrypted.bytes);
   }
 
   Uint8List _processBlocks(Uint8List input) {
@@ -90,3 +110,8 @@ const Map<AESMode, String> _modes = {
   AESMode.ofb64: 'OFB-64',
   AESMode.sic: 'SIC',
 };
+
+const List<AESMode> _streamable = [
+  AESMode.sic,
+  AESMode.ctr,
+];
