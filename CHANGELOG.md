@@ -1,3 +1,7 @@
+# 4.0.2
+
+- Fix streamble AES modes without padding.
+
 # 4.0.1
 
 - Upgrade dependencies.
