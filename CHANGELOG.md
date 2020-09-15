@@ -1,3 +1,7 @@
+# 4.0.3
+
+- Fix UTF-8 conversion on Fernet keys.
+
 # 4.0.2
 
 - Fix streamble AES modes without padding.
