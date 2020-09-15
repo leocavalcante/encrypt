@@ -80,4 +80,6 @@ class Key extends Encrypted {
 
     return Key(pbkdf2.process(_bytes));
   }
+
+  int get length => bytes.lengthInBytes;
 }

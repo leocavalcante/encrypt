@@ -40,5 +40,10 @@ void main() {
       expect(strechedKey.base64,
           equals('ykT8qFmrPp7TJyzY+E2NoBNjfWymzKOs1OCbRsO67fo='));
     });
+
+    test('Key.length', () {
+      final key = Key.fromLength(32);
+      expect(key.length, equals(32));
+    });
   });
 }

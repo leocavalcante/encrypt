@@ -8,14 +8,12 @@ class Fernet implements Algorithm {
   Key _encryptionKey;
   Clock _clock;
 
-  Fernet(Key b64key, {Clock clock}) {
-    final keyString = convert.utf8.decode(b64key.bytes);
-    final keyBytes = convert.base64Url.decode(keyString);
-    if (keyBytes.length != 32) {
+  Fernet(Key key, {Clock clock}) {
+    if (key.length != 32) {
       throw StateError('Fernet key must be 32 url-safe base64-encoded bytes.');
     }
-    _signKey = Key(Uint8List.fromList(keyBytes.sublist(0, 16)));
-    _encryptionKey = Key(Uint8List.fromList(keyBytes.sublist(16)));
+    _signKey = Key(Uint8List.fromList(key.bytes.sublist(0, 16)));
+    _encryptionKey = Key(Uint8List.fromList(key.bytes.sublist(16)));
     if (clock == null) {
       _clock = Clock();
     } else {
