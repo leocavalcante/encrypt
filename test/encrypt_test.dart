@@ -13,12 +13,18 @@ void main() {
   group('Fernet', () {
     final currentDateTime =
         DateTime.fromMillisecondsSinceEpoch(1565106118 * 1000);
-    final b64key = Key.fromUtf8(base64Url.encode(key.bytes));
-    final fernet = Fernet(b64key, clock: Clock.fixed(currentDateTime));
+
+    final signingKey = Key.fromUtf8('my16signingkey!!');
+    final encryptionKey = Key.fromUtf8('16bytesencrypkey');
+    final b64Key = base64Url
+        .encode(signingKey.bytes.toList()..addAll(encryptionKey.bytes));
+    final key = Key.fromBase64(b64Key);
+    final fernet = Fernet(key, clock: Clock.fixed(currentDateTime));
     final encrypter = Encrypter(fernet);
-    final encrypted = Encrypted(base64.decode(
-        'gAAAAABdSZ_GAAAAAAAAAAAAAAAAAAAAAP-kE5Zs_CyDB-8I8c26Iz9B78L6hleGlXZmqEjZh107U3ny9yRp8QUAc243_B7q0ZtFFs0xAoJDveTPXwTwvzCwXEd8I9NZ1fZeknZmJkEPRxEsJBh9K5QrqjR8B0Shyg=='));
+    final encrypted = Encrypted.fromBase64(
+        'gAAAAABdSZ/GAAAAAAAAAAAAAAAAAAAAACxNe+/PVLJMTKmBdPrlHat3Bj32TYdt1EKCz2jlJykTrwtMgSuZdLGXAIkmResqHLA5g0k7kzOCdHe02noK7YmV75oA2sLjSTE1zao/jtEdEB/aebAOYKQW8ZEm33oyXA==');
     final iv = IV.fromLength(16);
+
     test('encrypt', () {
       expect(encrypter.encrypt(text, iv: iv), equals(encrypted));
       // iv will be generated if not provided
