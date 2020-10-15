@@ -1,3 +1,7 @@
+# 4.1.0
+
+- PointyCastle v2
+
 # 4.0.3
 
 - Fix UTF-8 conversion on Fernet keys.
