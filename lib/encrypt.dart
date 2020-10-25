@@ -20,6 +20,8 @@ part 'src/algorithms/rsa.dart';
 
 part 'src/algorithms/salsa20.dart';
 
+part 'src/algorithms/ripemd128.dart';
+
 part 'src/encrypted.dart';
 
 part 'src/encrypter.dart';
