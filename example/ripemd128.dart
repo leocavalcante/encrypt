@@ -1,8 +1,7 @@
 import '../lib/encrypt.dart';
 
 void main() {
-  final plainText =
-      'hello'; //'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
+  final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
 
   final encrypter = Encrypter(Ripemd128());
 
