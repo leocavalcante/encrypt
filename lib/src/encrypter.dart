@@ -20,7 +20,7 @@ class Encrypter {
     return encryptBytes(convert.utf8.encode(input), iv: iv);
   }
 
-  /// Calls [decrypt] on the wrapped Algorith without UTF-8 decoding.
+  /// Calls [decrypt] on the wrapped Algorithm without UTF-8 decoding.
   List<int> decryptBytes(Encrypted encrypted, {IV iv}) {
     return algo.decrypt(encrypted, iv: iv).toList();
   }
