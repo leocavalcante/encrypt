@@ -27,6 +27,10 @@ class Encrypted {
   Encrypted.fromUtf8(String input)
       : _bytes = Uint8List.fromList(convert.utf8.encode(input));
 
+  /// Creates an Encrypted object from a Hex string.
+  Encrypted.fromHex(String hexString)
+      : _bytes = Uint8List.fromList(convert2.hex.decode(hexString));
+
   /// Creates an Encrypted object from a length.
   Encrypted.fromLength(int length) : _bytes = Uint8List(length);
 
@@ -56,6 +60,7 @@ class IV extends Encrypted {
   IV.fromBase16(String encoded) : super.fromBase16(encoded);
   IV.fromBase64(String encoded) : super.fromBase64(encoded);
   IV.fromUtf8(String input) : super.fromUtf8(input);
+  IV.fromHex(String hexString) : super.fromHex(hexString);
   IV.fromLength(int length) : super.fromLength(length);
   IV.fromSecureRandom(int length) : super(SecureRandom(length).bytes);
 }
@@ -66,6 +71,7 @@ class Key extends Encrypted {
   Key.fromBase16(String encoded) : super.fromBase16(encoded);
   Key.fromBase64(String encoded) : super.fromBase64(encoded);
   Key.fromUtf8(String input) : super.fromUtf8(input);
+  Key.fromHex(String hexString) : super.fromHex(hexString);
   Key.fromLength(int length) : super.fromLength(length);
   Key.fromSecureRandom(int length) : super(SecureRandom(length).bytes);
 

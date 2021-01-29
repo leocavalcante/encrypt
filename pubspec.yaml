@@ -15,6 +15,7 @@ dependencies:
   asn1lib: ^0.8.1
   clock: ^1.0.1
   collection: ^1.14.13
+  convert: ^2.1.1
   crypto: ^2.1.5
   pointycastle: ^2.0.0
 

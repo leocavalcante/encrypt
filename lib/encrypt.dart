@@ -7,6 +7,7 @@ import 'dart:typed_data';
 import 'package:asn1lib/asn1lib.dart';
 import 'package:clock/clock.dart';
 import 'package:collection/collection.dart';
+import 'package:convert/convert.dart' as convert2;
 import 'package:crypto/crypto.dart' hide Digest;
 import 'package:pointycastle/export.dart' hide Signer hide RSASigner;
 

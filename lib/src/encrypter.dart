@@ -40,4 +40,9 @@ class Encrypter {
   String decrypt64(String encoded, {IV iv}) {
     return decrypt(Encrypted.fromBase64(encoded), iv: iv);
   }
+
+  /// Sugar for `decrypt(Encrypted.fromHex(hexString))`.
+  String decryptHex(String hexString, {IV iv}) {
+    return decrypt(Encrypted.fromHex(hexString), iv: iv);
+  }
 }
