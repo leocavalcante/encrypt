@@ -7,14 +7,7 @@ class Encrypted {
   final Uint8List _bytes;
 
   /// Creates an Encrypted object from a hexdecimal string.
-  Encrypted.fromBase16(String encoded)
-      : _bytes = Uint8List.fromList(
-          List.generate(encoded.length,
-                  (i) => i % 2 == 0 ? encoded.substring(i, i + 2) : null)
-              .where((b) => b != null)
-              .map((b) => int.parse(b, radix: 16))
-              .toList(),
-        );
+  Encrypted.fromBase16(String encoded) : _bytes = decodeHexString(encoded);
 
   /// Creates an Encrypted object from a Base64 string.
   Encrypted.fromBase64(String encoded)
@@ -70,7 +63,7 @@ class Key extends Encrypted {
   Key.fromSecureRandom(int length) : super(SecureRandom(length).bytes);
 
   Key stretch(int desiredKeyLength,
-      {int iterationCount = 100, Uint8List salt}) {
+      {int iterationCount = 100, Uint8List? salt}) {
     if (salt == null) {
       salt = SecureRandom(desiredKeyLength).bytes;
     }

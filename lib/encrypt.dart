@@ -10,6 +10,8 @@ import 'package:collection/collection.dart';
 import 'package:crypto/crypto.dart' hide Digest;
 import 'package:pointycastle/export.dart' hide Signer hide RSASigner;
 
+part 'src/utils.dart';
+
 part 'src/algorithm.dart';
 
 part 'src/algorithms/aes.dart';
