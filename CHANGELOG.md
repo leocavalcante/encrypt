@@ -1,3 +1,7 @@
+# 5.0.0-beta.1
+
+- Preview/prerelase null safety support
+
 # 4.1.0
 
 - PointyCastle v2
