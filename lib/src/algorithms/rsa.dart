@@ -2,19 +2,19 @@ part of encrypt;
 
 // Abstract class for encryption and signing.
 abstract class AbstractRSA {
-  final RSAPublicKey publicKey;
-  final RSAPrivateKey privateKey;
-  final PublicKeyParameter<RSAPublicKey> _publicKeyParams;
-  final PrivateKeyParameter<RSAPrivateKey> _privateKeyParams;
+  final RSAPublicKey? publicKey;
+  final RSAPrivateKey? privateKey;
+  PublicKeyParameter<RSAPublicKey>? get _publicKeyParams =>
+      publicKey != null ? PublicKeyParameter(publicKey!) : null;
+  PrivateKeyParameter<RSAPrivateKey>? get _privateKeyParams =>
+      privateKey != null ? PrivateKeyParameter(privateKey!) : null;
   final AsymmetricBlockCipher _cipher;
 
   AbstractRSA({
     this.publicKey,
     this.privateKey,
     RSAEncoding encoding = RSAEncoding.PKCS1,
-  })  : this._publicKeyParams = PublicKeyParameter(publicKey),
-        this._privateKeyParams = PrivateKeyParameter(privateKey),
-        this._cipher = encoding == RSAEncoding.OAEP
+  }) : this._cipher = encoding == RSAEncoding.OAEP
             ? OAEPEncoding(RSAEngine())
             : PKCS1Encoding(RSAEngine());
 }
@@ -22,33 +22,33 @@ abstract class AbstractRSA {
 /// Wraps the RSA Engine Algorithm.
 class RSA extends AbstractRSA implements Algorithm {
   RSA(
-      {RSAPublicKey publicKey,
-      RSAPrivateKey privateKey,
+      {RSAPublicKey? publicKey,
+      RSAPrivateKey? privateKey,
       RSAEncoding encoding = RSAEncoding.PKCS1})
       : super(publicKey: publicKey, privateKey: privateKey, encoding: encoding);
 
   @override
-  Encrypted encrypt(Uint8List bytes, {IV iv}) {
+  Encrypted encrypt(Uint8List bytes, {IV? iv}) {
     if (publicKey == null) {
       throw StateError('Can\'t encrypt without a public key, null given.');
     }
 
     _cipher
       ..reset()
-      ..init(true, _publicKeyParams);
+      ..init(true, _publicKeyParams!);
 
     return Encrypted(_cipher.process(bytes));
   }
 
   @override
-  Uint8List decrypt(Encrypted encrypted, {IV iv}) {
+  Uint8List decrypt(Encrypted encrypted, {IV? iv}) {
     if (privateKey == null) {
       throw StateError('Can\'t decrypt without a private key, null given.');
     }
 
     _cipher
       ..reset()
-      ..init(false, _privateKeyParams);
+      ..init(false, _privateKeyParams!);
 
     return _cipher.process(encrypted.bytes);
   }
@@ -59,13 +59,17 @@ class RSASigner extends AbstractRSA implements SignerAlgorithm {
   final Uint8List _digestId;
   final Digest _digestCipher;
 
-  RSASigner(this.digest, {RSAPublicKey publicKey, RSAPrivateKey privateKey})
-      : _digestId = _digestIdFactoryMap[digest].id,
-        _digestCipher = _digestIdFactoryMap[digest].factory(),
+  RSASigner(this.digest, {RSAPublicKey? publicKey, RSAPrivateKey? privateKey})
+      : _digestId = _digestIdFactoryMap[digest]!.id,
+        _digestCipher = _digestIdFactoryMap[digest]!.factory(),
         super(publicKey: publicKey, privateKey: privateKey);
 
   @override
   Encrypted sign(Uint8List bytes) {
+    if (privateKey == null) {
+      throw StateError('Can\'t sign without a private key, null given.');
+    }
+
     final hash = Uint8List(_digestCipher.digestSize);
 
     _digestCipher
@@ -75,13 +79,17 @@ class RSASigner extends AbstractRSA implements SignerAlgorithm {
 
     _cipher
       ..reset()
-      ..init(true, _privateKeyParams);
+      ..init(true, _privateKeyParams!);
 
     return Encrypted(_cipher.process(_encode(hash)));
   }
 
   @override
   bool verify(Uint8List bytes, Encrypted signature) {
+    if (publicKey == null) {
+      throw StateError('Can\'t verify without a public key, null given.');
+    }
+
     final hash = Uint8List(_digestCipher.digestSize);
 
     _digestCipher
@@ -91,7 +99,7 @@ class RSASigner extends AbstractRSA implements SignerAlgorithm {
 
     _cipher
       ..reset()
-      ..init(false, _publicKeyParams);
+      ..init(false, _publicKeyParams!);
 
     var _signature = Uint8List(_cipher.outputBlockSize);
 
@@ -171,7 +179,7 @@ enum RSASignDigest {
 
 final _digestIdFactoryMap = <RSASignDigest, _DigestIdFactory>{
   RSASignDigest.SHA256: _DigestIdFactory(
-      _hexToBytes('0609608648016503040201'), () => SHA256Digest())
+      decodeHexString('0609608648016503040201'), () => SHA256Digest())
 };
 
 class _DigestIdFactory {
@@ -211,7 +219,7 @@ class RSAKeyParser {
     final modulus = (sequence.elements[0] as ASN1Integer).valueAsBigInteger;
     final exponent = (sequence.elements[1] as ASN1Integer).valueAsBigInteger;
 
-    return RSAPublicKey(modulus, exponent);
+    return RSAPublicKey(modulus!, exponent!);
   }
 
   RSAAsymmetricKey _parsePrivate(ASN1Sequence sequence) {
@@ -220,7 +228,7 @@ class RSAKeyParser {
     final p = (sequence.elements[4] as ASN1Integer).valueAsBigInteger;
     final q = (sequence.elements[5] as ASN1Integer).valueAsBigInteger;
 
-    return RSAPrivateKey(modulus, exponent, p, q);
+    return RSAPrivateKey(modulus!, exponent!, p, q);
   }
 
   ASN1Sequence _parseSequence(List<String> rows) {
@@ -252,9 +260,3 @@ class RSAKeyParser {
     return parser.nextObject() as ASN1Sequence;
   }
 }
-
-Uint8List _hexToBytes(String encoded) => (Uint8List.fromList(List.generate(
-        encoded.length, (i) => i % 2 == 0 ? encoded.substring(i, i + 2) : null)
-    .where((b) => b != null)
-    .map((b) => int.parse(b, radix: 16))
-    .toList()));

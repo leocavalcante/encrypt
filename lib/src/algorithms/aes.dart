@@ -4,9 +4,9 @@ part of encrypt;
 class AES implements Algorithm {
   final Key key;
   final AESMode mode;
-  final String padding;
+  final String? padding;
   final BlockCipher _cipher;
-  final StreamCipher _streamCipher;
+  final StreamCipher? _streamCipher;
 
   AES(this.key, {this.mode = AESMode.sic, this.padding = 'PKCS7'})
       : _cipher = padding != null
@@ -17,13 +17,17 @@ class AES implements Algorithm {
             : null;
 
   @override
-  Encrypted encrypt(Uint8List bytes, {IV iv}) {
+  Encrypted encrypt(Uint8List bytes, {IV? iv}) {
+    if (iv == null) {
+      throw StateError('IV is required.');
+    }
+
     if (_streamCipher != null) {
-      _streamCipher
+      _streamCipher!
         ..reset()
         ..init(true, _buildParams(iv));
 
-      return Encrypted(_streamCipher.process(bytes));
+      return Encrypted(_streamCipher!.process(bytes));
     }
 
     _cipher
@@ -38,13 +42,17 @@ class AES implements Algorithm {
   }
 
   @override
-  Uint8List decrypt(Encrypted encrypted, {IV iv}) {
+  Uint8List decrypt(Encrypted encrypted, {IV? iv}) {
+    if (iv == null) {
+      throw StateError('IV is required.');
+    }
+
     if (_streamCipher != null) {
-      _streamCipher
+      _streamCipher!
         ..reset()
         ..init(false, _buildParams(iv));
 
-      return _streamCipher.process(encrypted.bytes);
+      return _streamCipher!.process(encrypted.bytes);
     }
 
     _cipher

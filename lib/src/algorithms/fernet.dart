@@ -4,11 +4,11 @@ part of encrypt;
 class Fernet implements Algorithm {
   final _maxClockSkew = 60;
 
-  Key _signKey;
-  Key _encryptionKey;
-  Clock _clock;
+  late final Key _signKey;
+  late final Key _encryptionKey;
+  late final Clock _clock;
 
-  Fernet(Key key, {Clock clock}) {
+  Fernet(Key key, {Clock? clock}) {
     if (key.length != 32) {
       throw StateError('Fernet key must be 32 url-safe base64-encoded bytes.');
     }
@@ -22,7 +22,7 @@ class Fernet implements Algorithm {
   }
 
   @override
-  Encrypted encrypt(Uint8List bytes, {IV iv}) {
+  Encrypted encrypt(Uint8List bytes, {IV? iv}) {
     if (iv == null) {
       iv = IV.fromSecureRandom(16);
     }
@@ -32,7 +32,7 @@ class Fernet implements Algorithm {
   }
 
   @override
-  Uint8List decrypt(Encrypted encrypted, {IV iv, int ttl}) {
+  Uint8List decrypt(Encrypted encrypted, {IV? iv, int? ttl}) {
     final data = encrypted.bytes;
     if (data.first != 0x80) {
       throw StateError('Invalid token');

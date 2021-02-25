@@ -9,7 +9,11 @@ class Salsa20 implements Algorithm {
   Salsa20(this.key);
 
   @override
-  Encrypted encrypt(Uint8List bytes, {IV iv}) {
+  Encrypted encrypt(Uint8List bytes, {IV? iv}) {
+    if (iv == null) {
+      throw StateError('IV is required.');
+    }
+
     _cipher
       ..reset()
       ..init(true, _buildParams(iv));
@@ -18,7 +22,11 @@ class Salsa20 implements Algorithm {
   }
 
   @override
-  Uint8List decrypt(Encrypted encrypted, {IV iv}) {
+  Uint8List decrypt(Encrypted encrypted, {IV? iv}) {
+    if (iv == null) {
+      throw StateError('IV is required.');
+    }
+
     _cipher
       ..reset()
       ..init(false, _buildParams(iv));
