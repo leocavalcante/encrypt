@@ -1,3 +1,7 @@
+# 5.0.0
+
+- Null safety support stable (sdk: ">=2.12.0 <3.0.0")
+
 # 5.0.0-beta.1
 
 - Preview/prerelase null safety support
