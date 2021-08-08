@@ -1,3 +1,7 @@
+# 5.0.1
+
+- Fix web support
+
 # 5.0.0
 
 - Null safety support stable (sdk: ">=2.12.0 <3.0.0")
