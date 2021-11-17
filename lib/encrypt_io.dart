@@ -12,7 +12,7 @@ Future<T> parseKeyFromFile<T extends RSAAsymmetricKey>(String filename) async {
 
 T parseKeyFromFileSync<T extends RSAAsymmetricKey>(String filename) {
   final file = File(filename);
-  final key = await file.readAsStringSync();
+  final key = file.readAsStringSync();
   final parser = RSAKeyParser();
   return parser.parse(key) as T;
 }
