@@ -1,5 +1,5 @@
 name: encrypt
-version: 5.0.1
+version: 5.0.2
 description: A set of high-level APIs over PointyCastle for two-way cryptography.
 homepage: https://github.com/leocavalcante/encrypt
 
@@ -15,7 +15,7 @@ dependencies:
   clock: ^1.1.0
   collection: ^1.15.0
   crypto: ^3.0.0
-  pointycastle: ^3.2.0
+  pointycastle: ^3.5.0
 
 dev_dependencies:
   test: ^1.16.8

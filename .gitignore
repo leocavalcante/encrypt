@@ -1,6 +1,7 @@
 .dart_tool/
 .packages
 .pub/
+.idea/
 build/
 doc/api/
 example/issue_*

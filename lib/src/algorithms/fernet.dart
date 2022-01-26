@@ -22,7 +22,7 @@ class Fernet implements Algorithm {
   }
 
   @override
-  Encrypted encrypt(Uint8List bytes, {IV? iv}) {
+  Encrypted encrypt(Uint8List bytes, {IV? iv, Uint8List? associatedData}) {
     if (iv == null) {
       iv = IV.fromSecureRandom(16);
     }
@@ -32,7 +32,12 @@ class Fernet implements Algorithm {
   }
 
   @override
-  Uint8List decrypt(Encrypted encrypted, {IV? iv, int? ttl}) {
+  Uint8List decrypt(
+    Encrypted encrypted, {
+    IV? iv,
+    Uint8List? associatedData,
+    int? ttl,
+  }) {
     final data = encrypted.bytes;
     if (data.first != 0x80) {
       throw StateError('Invalid token');
@@ -70,8 +75,8 @@ class Fernet implements Algorithm {
     final parts = data.sublist(0, length - 32);
     final _digest = data.sublist(length - 32);
     var hmac = Hmac(sha256, _signKey.bytes);
-    final digest_ = hmac.convert(parts).bytes;
-    if (!ListEquality().equals(_digest, digest_)) {
+    final digestConverted = hmac.convert(parts).bytes;
+    if (!ListEquality().equals(_digest, digestConverted)) {
       throw StateError('Invalid token');
     }
   }

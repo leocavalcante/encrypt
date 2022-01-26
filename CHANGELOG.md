@@ -1,3 +1,7 @@
+# 5.0.2
+
+- Support AES-GCM
+
 # 5.0.1
 
 - Fix web support
