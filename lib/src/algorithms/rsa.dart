@@ -14,8 +14,11 @@ abstract class AbstractRSA {
     this.publicKey,
     this.privateKey,
     RSAEncoding encoding = RSAEncoding.PKCS1,
+    RSADigest digest = RSADigest.SHA1,
   }) : this._cipher = encoding == RSAEncoding.OAEP
-            ? OAEPEncoding(RSAEngine())
+            ? digest == RSADigest.SHA1
+              ? OAEPEncoding(RSAEngine())
+              : OAEPEncoding.withSHA256(RSAEngine())
             : PKCS1Encoding(RSAEngine());
 }
 
@@ -24,8 +27,14 @@ class RSA extends AbstractRSA implements Algorithm {
   RSA(
       {RSAPublicKey? publicKey,
       RSAPrivateKey? privateKey,
-      RSAEncoding encoding = RSAEncoding.PKCS1})
-      : super(publicKey: publicKey, privateKey: privateKey, encoding: encoding);
+      RSAEncoding encoding = RSAEncoding.PKCS1,
+      RSADigest digest = RSADigest.SHA1})
+      : super(
+        publicKey: publicKey,
+        privateKey: privateKey,
+        encoding: encoding,
+        digest: digest,
+      );
 
   @override
   Encrypted encrypt(Uint8List bytes, {IV? iv, Uint8List? associatedData}) {
@@ -171,6 +180,11 @@ class RSASigner extends AbstractRSA implements SignerAlgorithm {
 enum RSAEncoding {
   PKCS1,
   OAEP,
+}
+
+enum RSADigest {
+  SHA1,
+  SHA256,
 }
 
 enum RSASignDigest {
