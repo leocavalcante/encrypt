@@ -150,14 +150,40 @@ void main() {
     final RSAPrivateKey privateKey = parser
         .parse(File('test/private.pem').readAsStringSync()) as RSAPrivateKey;
 
-    RSAEncoding.values.forEach((encoding) {
-      final encrypter = Encrypter(RSA(
-          publicKey: publicKey, privateKey: privateKey, encoding: encoding));
+    test('encrypt/decrypt PKCS1', () {
+      final encrypter = Encrypter(
+        RSA(publicKey: publicKey, privateKey: privateKey),
+      );
       final encrypted = encrypter.encrypt(text);
 
-      test('encrypt/decrypt $encoding', () {
-        expect(encrypter.decrypt(encrypted), equals(text));
-      });
+      expect(encrypter.decrypt(encrypted), equals(text));
+    });
+
+    test('encrypt/decrypt OAEP (SHA1)', () {
+      final encrypter = Encrypter(
+        RSA(
+          publicKey: publicKey,
+          privateKey: privateKey,
+          encoding: RSAEncoding.OAEP,
+        ),
+      );
+      final encrypted = encrypter.encrypt(text);
+
+      expect(encrypter.decrypt(encrypted), equals(text));
+    });
+
+    test('encrypt/decrypt OAEP (SHA256)', () {
+      final encrypter = Encrypter(
+        RSA(
+          publicKey: publicKey,
+          privateKey: privateKey,
+          encoding: RSAEncoding.OAEP,
+          digest: RSADigest.SHA256,
+        ),
+      );
+      final encrypted = encrypter.encrypt(text);
+
+      expect(encrypter.decrypt(encrypted), equals(text));
     });
 
     group('StateError', () {
