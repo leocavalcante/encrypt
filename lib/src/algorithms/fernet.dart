@@ -69,7 +69,7 @@ class Fernet implements Algorithm {
     var bdata = ByteData.view(buffer);
     try {
       return bdata.getUint64(0, Endian.big);
-    } catch (e) {
+    } catch (_) {
       // in dart2js there is no getUint64(), so fall back and improvise.
       //  Note this is not perfect as dart2js only has doubles, no 64bit ints,
       //  but this is only going to be compared to a .now().millisecondsSinceEpoch
@@ -102,7 +102,15 @@ class Fernet implements Algorithm {
     // convert epoch timestamp to binary data, in bytes
     var buffer = Uint8List(8).buffer;
     var bdata = ByteData.view(buffer);
-    bdata.setUint64(0, currentTime, Endian.big);
+    try {
+      bdata.setUint64(0, currentTime, Endian.big);
+    } catch (_) {
+      // in dart2js there is no setUint64(), so fall back and improvise.
+      final int hi=(currentTime>>32)&0xffffffff;
+      final int low=currentTime&0xffffffff;
+      bdata.setUint32(0, hi, Endian.big);
+      bdata.setUint32(4, low, Endian.big);
+    }
     final currentTimeBytes = bdata.buffer.asUint8List();
 
     final parts = [0x80, ...currentTimeBytes, ...iv.bytes, ...cipherText.bytes];
