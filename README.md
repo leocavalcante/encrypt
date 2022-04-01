@@ -129,7 +129,7 @@ void main() {
   final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
   final key = Key.fromUtf8('my32lengthsupersecretnooneknows1');
 
-  final b64key = Key.fromUtf8(base64Url.encode(key.bytes));
+  final b64key = Key.fromUtf8(base64Url.encode(key.bytes).substring(0,32));
   // if you need to use the ttl feature, you'll need to use APIs in the algorithm itself
   final fernet = Fernet(b64key);
   final encrypter = Encrypter(fernet);
