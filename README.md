@@ -92,7 +92,7 @@ final encrypter = Encrypter(AES(key, mode: AESMode.cbc));
 - OFB-64 `AESMode.ofb64`
 - SIC `AESMode.sic`
 
-##### No/zero padding 
+##### No/zero padding
 
 To remove padding, pass `null` to the `padding` named parameter on the constructor:
 
@@ -128,9 +128,8 @@ import 'dart:convert';
 void main() {
   final plainText = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit';
   final key = Key.fromUtf8('my32lengthsupersecretnooneknows1');
-  final iv = IV.fromLength(16);
 
-  final b64key = Key.fromUtf8(base64Url.encode(key.bytes));
+  final b64key = Key.fromUtf8(base64Url.encode(key.bytes).substring(0,32));
   // if you need to use the ttl feature, you'll need to use APIs in the algorithm itself
   final fernet = Fernet(b64key);
   final encrypter = Encrypter(fernet);
