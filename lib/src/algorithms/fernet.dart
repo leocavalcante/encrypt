@@ -67,7 +67,21 @@ class Fernet implements Algorithm {
     final tsBytes = data.sublist(1, 9);
     var buffer = Uint8List.fromList(tsBytes).buffer;
     var bdata = ByteData.view(buffer);
-    return bdata.getUint64(0, Endian.big);
+    try {
+      return bdata.getUint64(0, Endian.big);
+    } catch (e) {
+      // in dart2js there is no getUint64(), so fall back and improvise.
+      //  Note this is not perfect as dart2js only has doubles, no 64bit ints,
+      //  but this is only going to be compared to a .now().millisecondsSinceEpoch
+      //  timestamp in and int so we don't need to worry about being >max int
+      //  we can store because .now().millisecondsSinceEpoch would have the same
+      //  overloading problem -we'll all be dead when it overflows
+      //  (max double/millseconds in year =9007199254740991/3.154e+10=285580 years
+      //   from 1970)
+      final int hi=bdata.getUint32(0, Endian.big);
+      final int low=bdata.getUint32(4, Endian.big);
+      return (hi<<32|low);
+    }
   }
 
   void _verifySignature(Uint8List data) {
