@@ -20,9 +20,26 @@ void main() {
       expect(encrypted.bytes, equals([0, 1, 2]));
     });
 
-    test('fromLength', () {
-      final encrypted = Encrypted.fromLength(3);
+    test('allZerosOfLength', () {
+      final encrypted = Encrypted.allZerosOfLength(3);
+      expect(encrypted.bytes.length, equals(3));
       expect(encrypted.bytes, equals([0, 0, 0]));
+    });
+
+    test('fromLength', () {
+      final encrypted = Encrypted.fromLength(20);
+      final encrypted2 = Encrypted.fromLength(20);
+      expect(encrypted.bytes.length, equals(20));
+      expect(encrypted2.bytes.length, equals(20));
+      expect(encrypted.bytes, isNot(equals(encrypted2.bytes)));
+    });
+
+    test('fromSecureRandom', () {
+      final encrypted = Encrypted.fromSecureRandom(20);
+      final encrypted2 = Encrypted.fromSecureRandom(20);
+      expect(encrypted.bytes.length, equals(20));
+      expect(encrypted2.bytes.length, equals(20));
+      expect(encrypted.bytes, isNot(equals(encrypted2.bytes)));
     });
 
     test('fromUtf8', () {
