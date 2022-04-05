@@ -23,7 +23,7 @@ void main() {
     final encrypter = Encrypter(fernet);
     final encrypted = Encrypted.fromBase64(
         'gAAAAABdSZ/GAAAAAAAAAAAAAAAAAAAAACxNe+/PVLJMTKmBdPrlHat3Bj32TYdt1EKCz2jlJykTrwtMgSuZdLGXAIkmResqHLA5g0k7kzOCdHe02noK7YmV75oA2sLjSTE1zao/jtEdEB/aebAOYKQW8ZEm33oyXA==');
-    final iv = IV.fromLength(16);
+    final iv = IV.allZerosOfLength(16);
 
     test('encrypt', () {
       expect(encrypter.encrypt(text, iv: iv), equals(encrypted));
@@ -59,12 +59,12 @@ void main() {
         final encrypted = Encrypted(base64.decode(encoded));
 
         test('encrypt', () {
-          expect(encrypter.encrypt(text, iv: IV.fromLength(16)),
+          expect(encrypter.encrypt(text, iv: IV.allZerosOfLength(16)),
               equals(encrypted));
         });
 
         test('decrypt', () {
-          expect(encrypter.decrypt(encrypted, iv: IV.fromLength(16)),
+          expect(encrypter.decrypt(encrypted, iv: IV.allZerosOfLength(16)),
               equals(text));
         });
       });
@@ -89,12 +89,12 @@ void main() {
         final encrypted = Encrypted(base64.decode(encoded));
 
         test('encrypt', () {
-          expect(encrypter.encrypt(text.padRight(64), iv: IV.fromLength(16)),
+          expect(encrypter.encrypt(text.padRight(64), iv: IV.allZerosOfLength(16)),
               equals(encrypted));
         });
 
         test('decrypt', () {
-          expect(encrypter.decrypt(encrypted, iv: IV.fromLength(16)),
+          expect(encrypter.decrypt(encrypted, iv: IV.allZerosOfLength(16)),
               equals(text.padRight(64)));
         });
       });
@@ -112,12 +112,12 @@ void main() {
           final encrypted = Encrypted(base64.decode(encoded));
 
           test('encrypt', () {
-            expect(encrypter.encrypt(text, iv: IV.fromLength(16)),
+            expect(encrypter.encrypt(text, iv: IV.allZerosOfLength(16)),
                 equals(encrypted));
           });
 
           test('decrypt', () {
-            expect(encrypter.decrypt(encrypted, iv: IV.fromLength(16)),
+            expect(encrypter.decrypt(encrypted, iv: IV.allZerosOfLength(16)),
                 equals(text));
           });
         });
@@ -135,12 +135,12 @@ void main() {
     test(
         'encrypt',
         () => expect(
-            encrypter.encrypt(text, iv: IV.fromLength(8)), equals(encrypted)));
+          encrypter.encrypt(text, iv: IV.allZerosOfLength(8)), equals(encrypted)));
 
     test(
         'decrypt',
         () => expect(
-            encrypter.decrypt(encrypted, iv: IV.fromLength(8)), equals(text)));
+          encrypter.decrypt(encrypted, iv: IV.allZerosOfLength(8)), equals(text)));
   });
 
   group('RSA', () {
