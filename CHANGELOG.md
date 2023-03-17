@@ -1,3 +1,6 @@
+# 5.0.3
+
+- Update pointycastle version to support AES-GCM with Flutter Web
 # 5.0.2
 
 - Support AES-GCM
