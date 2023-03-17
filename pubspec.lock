@@ -220,12 +220,11 @@ packages:
   pointycastle:
     dependency: "direct main"
     description:
-      path: "."
-      ref: gcm-web
-      resolved-ref: aafaeb9a3d7cacab5c23e25d1a282aeb8ef9038d
-      url: "https://github.com/redDwarf03/pc-dart.git"
-    source: git
-    version: "3.6.2"
+      name: pointycastle
+      sha256: "57b6b78df14175658f09c5dfcfc51a46ad9561a3504fe679913dab404d0cc0f2"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.7.0"
   pool:
     dependency: transitive
     description:

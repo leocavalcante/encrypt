@@ -15,11 +15,7 @@ dependencies:
   clock: ^1.1.1
   collection: ^1.17.0
   crypto: ^3.0.2
-  #pointycastle: ^3.6.2
-  pointycastle:
-    git:
-     url: https://github.com/redDwarf03/pc-dart.git
-     ref: gcm-web
+  pointycastle: ^3.7.0
 
 dev_dependencies:
   test: ^1.22.0
