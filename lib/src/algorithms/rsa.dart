@@ -233,7 +233,7 @@ class RSAKeyParser {
     final modulus = (sequence.elements[0] as ASN1Integer).valueAsBigInteger;
     final exponent = (sequence.elements[1] as ASN1Integer).valueAsBigInteger;
 
-    return RSAPublicKey(modulus!, exponent!);
+    return RSAPublicKey(modulus, exponent);
   }
 
   RSAAsymmetricKey _parsePrivate(ASN1Sequence sequence) {
@@ -242,7 +242,7 @@ class RSAKeyParser {
     final p = (sequence.elements[4] as ASN1Integer).valueAsBigInteger;
     final q = (sequence.elements[5] as ASN1Integer).valueAsBigInteger;
 
-    return RSAPrivateKey(modulus!, exponent!, p, q);
+    return RSAPrivateKey(modulus, exponent, p, q);
   }
 
   ASN1Sequence _parseSequence(List<String> rows) {
