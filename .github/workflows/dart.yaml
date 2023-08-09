@@ -1,0 +1,30 @@
+name: Dart CI
+permissions: read-all
+
+on:
+  pull_request:
+    branches: [ 5.x ]
+  push:
+    branches: [ 5.x ]
+  schedule:
+    - cron: '0 0 * * 0' # weekly
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sdk: [beta, dev]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: dart-lang/setup-dart@v1
+        with:
+          sdk: ${{matrix.sdk}}
+
+      - run: dart pub get
+
+      - run: dart analyze --fatal-infos
+
+      # - run: dart format --output=none --set-exit-if-changed .
+
+      - run: dart test

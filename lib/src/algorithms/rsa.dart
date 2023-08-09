@@ -17,8 +17,8 @@ abstract class AbstractRSA {
     RSADigest digest = RSADigest.SHA1,
   }) : this._cipher = encoding == RSAEncoding.OAEP
             ? digest == RSADigest.SHA1
-              ? OAEPEncoding(RSAEngine())
-              : OAEPEncoding.withSHA256(RSAEngine())
+                ? OAEPEncoding(RSAEngine())
+                : OAEPEncoding.withSHA256(RSAEngine())
             : PKCS1Encoding(RSAEngine());
 }
 
@@ -30,11 +30,11 @@ class RSA extends AbstractRSA implements Algorithm {
       RSAEncoding encoding = RSAEncoding.PKCS1,
       RSADigest digest = RSADigest.SHA1})
       : super(
-        publicKey: publicKey,
-        privateKey: privateKey,
-        encoding: encoding,
-        digest: digest,
-      );
+          publicKey: publicKey,
+          privateKey: privateKey,
+          encoding: encoding,
+          digest: digest,
+        );
 
   @override
   Encrypted encrypt(Uint8List bytes, {IV? iv, Uint8List? associatedData}) {
@@ -233,7 +233,7 @@ class RSAKeyParser {
     final modulus = (sequence.elements[0] as ASN1Integer).valueAsBigInteger;
     final exponent = (sequence.elements[1] as ASN1Integer).valueAsBigInteger;
 
-    return RSAPublicKey(modulus!, exponent!);
+    return RSAPublicKey(modulus, exponent);
   }
 
   RSAAsymmetricKey _parsePrivate(ASN1Sequence sequence) {
@@ -242,7 +242,7 @@ class RSAKeyParser {
     final p = (sequence.elements[4] as ASN1Integer).valueAsBigInteger;
     final q = (sequence.elements[5] as ASN1Integer).valueAsBigInteger;
 
-    return RSAPrivateKey(modulus!, exponent!, p, q);
+    return RSAPrivateKey(modulus, exponent, p, q);
   }
 
   ASN1Sequence _parseSequence(List<String> rows) {
