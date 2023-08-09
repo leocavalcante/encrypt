@@ -2,7 +2,6 @@ part of encrypt;
 
 /// Represents an encripted value.
 class Encrypted {
-
   /// Creates an Encrypted object from a Uint8List.
   Encrypted(this._bytes);
 
@@ -54,11 +53,13 @@ class Encrypted {
 
     return false;
   }
+
+  @override
+  int get hashCode => ListEquality().hash(bytes);
 }
 
 /// Represents an Initialization Vector.
 class IV extends Encrypted {
-
   /// Creates an Initialization Vector object from a Uint8List.
   IV(Uint8List bytes) : super(bytes);
 
@@ -88,7 +89,6 @@ class IV extends Encrypted {
 
 /// Represents an Encryption Key.
 class Key extends Encrypted {
-
   /// Creates an Encryption Key object from a Uint8List.
   Key(Uint8List bytes) : super(bytes);
 

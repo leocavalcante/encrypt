@@ -1,6 +1,8 @@
+include: package:lints/core.yaml
+
 analyzer:
-  strong-mode:
-    implicit-casts: false
+  language:
+    strict-casts: false
 
 linter:
   rules:
