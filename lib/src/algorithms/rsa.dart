@@ -17,8 +17,8 @@ abstract class AbstractRSA {
     RSADigest digest = RSADigest.SHA1,
   }) : this._cipher = encoding == RSAEncoding.OAEP
             ? digest == RSADigest.SHA1
-              ? OAEPEncoding(RSAEngine())
-              : OAEPEncoding.withSHA256(RSAEngine())
+                ? OAEPEncoding(RSAEngine())
+                : OAEPEncoding.withSHA256(RSAEngine())
             : PKCS1Encoding(RSAEngine());
 }
 
@@ -30,11 +30,11 @@ class RSA extends AbstractRSA implements Algorithm {
       RSAEncoding encoding = RSAEncoding.PKCS1,
       RSADigest digest = RSADigest.SHA1})
       : super(
-        publicKey: publicKey,
-        privateKey: privateKey,
-        encoding: encoding,
-        digest: digest,
-      );
+          publicKey: publicKey,
+          privateKey: privateKey,
+          encoding: encoding,
+          digest: digest,
+        );
 
   @override
   Encrypted encrypt(Uint8List bytes, {IV? iv, Uint8List? associatedData}) {

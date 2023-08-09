@@ -23,7 +23,7 @@ class AES implements Algorithm {
 
   @override
   Encrypted encrypt(Uint8List bytes, {IV? iv, Uint8List? associatedData}) {
-    if (iv == null) {
+    if (mode != AESMode.ecb && iv == null) {
       throw StateError('IV is required.');
     }
 
@@ -48,7 +48,7 @@ class AES implements Algorithm {
 
   @override
   Uint8List decrypt(Encrypted encrypted, {IV? iv, Uint8List? associatedData}) {
-    if (iv == null) {
+    if (mode != AESMode.ecb && iv == null) {
       throw StateError('IV is required.');
     }
 
@@ -81,7 +81,11 @@ class AES implements Algorithm {
     return output;
   }
 
-  CipherParameters _buildParams(IV iv, {Uint8List? associatedData}) {
+  CipherParameters _buildParams(IV? iv, {Uint8List? associatedData}) {
+    if (mode == AESMode.ecb || iv == null) {
+      return KeyParameter(key.bytes);
+    }
+
     if (mode == AESMode.gcm) {
       return AEADParameters(
         KeyParameter(key.bytes),
@@ -93,10 +97,6 @@ class AES implements Algorithm {
 
     if (padding != null) {
       return _paddedParams(iv);
-    }
-
-    if (mode == AESMode.ecb) {
-      return KeyParameter(key.bytes);
     }
 
     return ParametersWithIV<KeyParameter>(KeyParameter(key.bytes), iv.bytes);
