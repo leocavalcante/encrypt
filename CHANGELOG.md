@@ -1,15 +1,8 @@
-# 5.0.4
-
-- Require `asn1lib` version `^1.5.0` which, among other things, makes
-  nullability changes to its API
-- Fix the resulting null-awareness warnings in lib/src/algorithms/rsa.dart
-
-# 5.0.3
-
-- Update pointycastle version to support AES-GCM with Flutter Web
 # 5.0.2
 
+- Update pointycastle version to support AES-GCM with Flutter Web
 - Support AES-GCM
+- Fixed null safety related warnings from `package:asnlib`.
 
 # 5.0.1
 
