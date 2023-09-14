@@ -83,7 +83,11 @@ class AES implements Algorithm {
 
   CipherParameters _buildParams(IV? iv, {Uint8List? associatedData}) {
     if (mode == AESMode.ecb || iv == null) {
-      return KeyParameter(key.bytes);
+      if (padding != null) {
+        return PaddedBlockCipherParameters(KeyParameter(key.bytes), null);
+      } else {
+        return KeyParameter(key.bytes);
+      }
     }
 
     if (mode == AESMode.gcm) {
