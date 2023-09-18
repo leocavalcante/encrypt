@@ -1,3 +1,8 @@
+# 5.0.3
+
+- Fixed tests failing with AES ECB with padding by @JimWuerch in #312
+- fix: Could not parse version "~3.6.2" by @Marc-R2 in #315
+
 # 5.0.2
 
 - Update pointycastle version to support AES-GCM with Flutter Web
