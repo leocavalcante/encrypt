@@ -1,3 +1,7 @@
+# 5.0.4
+
+- Force Pointycastle version
+
 # 5.0.3
 
 - Fixed tests failing with AES ECB with padding by @JimWuerch in #312
