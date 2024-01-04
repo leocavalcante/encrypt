@@ -14,6 +14,10 @@ class Encrypted {
   Encrypted.fromBase64(String encoded)
       : _bytes = convert.base64.decode(encoded);
 
+  /// Creates an Encrypted object from a Base64Url string.
+  Encrypted.fromBase64Url(String encoded)
+      : _bytes = Uint8List.fromList(convert.base64Decode(encoded));
+
   /// Creates an Encrypted object from a Base64 string.
   Encrypted.from64(String encoded) : _bytes = convert.base64.decode(encoded);
 
@@ -45,6 +49,9 @@ class Encrypted {
   /// Gets the Encrypted bytes as a Base64 representation.
   String get base64 => convert.base64.encode(_bytes);
 
+  /// Gets the Encrypted bytes as a Base64Url representation.
+  String get base64Url => convert.base64Url.encode(_bytes);
+  
   @override
   bool operator ==(other) {
     if (other is Encrypted) {
