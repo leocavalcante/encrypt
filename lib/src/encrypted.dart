@@ -101,6 +101,9 @@ class Key extends Encrypted {
   /// Creates an Encryption Key object from a Base64 string.
   Key.fromBase64(String encoded) : super.fromBase64(encoded);
 
+  /// Creates an Encryption Key from a Base64Url string.
+  Key.fromBase64Url(String encoded) : super.fromBase64Url(encoded);
+
   /// Creates an Encryption Key object from a UTF-8 string.
   Key.fromUtf8(String input) : super.fromUtf8(input);
 
