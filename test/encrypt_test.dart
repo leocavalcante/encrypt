@@ -188,6 +188,12 @@ void main() {
     });
 
     test('encrypt/decrypt OAEP (SHA512)', () {
+      final RSAPublicKey publicKey =
+          parser.parse(File('test/public2048.pem').readAsStringSync())
+              as RSAPublicKey;
+      final RSAPrivateKey privateKey =
+          parser.parse(File('test/private2048.pem').readAsStringSync())
+              as RSAPrivateKey;
       final encrypter = Encrypter(
         RSA(
           publicKey: publicKey,
