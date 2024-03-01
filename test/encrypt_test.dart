@@ -89,7 +89,8 @@ void main() {
         final encrypted = Encrypted(base64.decode(encoded));
 
         test('encrypt', () {
-          expect(encrypter.encrypt(text.padRight(64), iv: IV.allZerosOfLength(16)),
+          expect(
+              encrypter.encrypt(text.padRight(64), iv: IV.allZerosOfLength(16)),
               equals(encrypted));
         });
 
@@ -134,13 +135,13 @@ void main() {
 
     test(
         'encrypt',
-        () => expect(
-          encrypter.encrypt(text, iv: IV.allZerosOfLength(8)), equals(encrypted)));
+        () => expect(encrypter.encrypt(text, iv: IV.allZerosOfLength(8)),
+            equals(encrypted)));
 
     test(
         'decrypt',
-        () => expect(
-          encrypter.decrypt(encrypted, iv: IV.allZerosOfLength(8)), equals(text)));
+        () => expect(encrypter.decrypt(encrypted, iv: IV.allZerosOfLength(8)),
+            equals(text)));
   });
 
   group('RSA', () {
@@ -179,6 +180,26 @@ void main() {
           privateKey: privateKey,
           encoding: RSAEncoding.OAEP,
           digest: RSADigest.SHA256,
+        ),
+      );
+      final encrypted = encrypter.encrypt(text);
+
+      expect(encrypter.decrypt(encrypted), equals(text));
+    });
+
+    test('encrypt/decrypt OAEP (SHA512)', () {
+      final RSAPublicKey publicKey =
+          parser.parse(File('test/public2048.pem').readAsStringSync())
+              as RSAPublicKey;
+      final RSAPrivateKey privateKey =
+          parser.parse(File('test/private2048.pem').readAsStringSync())
+              as RSAPrivateKey;
+      final encrypter = Encrypter(
+        RSA(
+          publicKey: publicKey,
+          privateKey: privateKey,
+          encoding: RSAEncoding.OAEP,
+          digest: RSADigest.SHA512,
         ),
       );
       final encrypted = encrypter.encrypt(text);

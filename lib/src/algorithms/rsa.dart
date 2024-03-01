@@ -8,18 +8,34 @@ abstract class AbstractRSA {
       publicKey != null ? PublicKeyParameter(publicKey!) : null;
   PrivateKeyParameter<RSAPrivateKey>? get _privateKeyParams =>
       privateKey != null ? PrivateKeyParameter(privateKey!) : null;
-  final AsymmetricBlockCipher _cipher;
+  late final AsymmetricBlockCipher _cipher;
+
+  // ignore: non_constant_identifier_names
+  AsymmetricBlockCipher _OAEPCipher(RSADigest digest) {
+    switch (digest) {
+      case RSADigest.SHA256:
+        return OAEPEncoding.withSHA256(RSAEngine());
+      case RSADigest.SHA512:
+        return OAEPEncoding.withCustomDigest(
+          () => SHA512Digest(),
+          RSAEngine(),
+        );
+      case RSADigest.SHA1:
+      default:
+        return OAEPEncoding.withSHA1(RSAEngine());
+    }
+  }
 
   AbstractRSA({
     this.publicKey,
     this.privateKey,
     RSAEncoding encoding = RSAEncoding.PKCS1,
     RSADigest digest = RSADigest.SHA1,
-  }) : this._cipher = encoding == RSAEncoding.OAEP
-            ? digest == RSADigest.SHA1
-                ? OAEPEncoding(RSAEngine())
-                : OAEPEncoding.withSHA256(RSAEngine())
-            : PKCS1Encoding(RSAEngine());
+  }) {
+    _cipher = encoding == RSAEncoding.OAEP
+        ? _OAEPCipher(digest)
+        : PKCS1Encoding(RSAEngine());
+  }
 }
 
 /// Wraps the RSA Engine Algorithm.
@@ -185,10 +201,12 @@ enum RSAEncoding {
 enum RSADigest {
   SHA1,
   SHA256,
+  SHA512,
 }
 
 enum RSASignDigest {
   SHA256,
+  SHA512,
 }
 
 final _digestIdFactoryMap = <RSASignDigest, _DigestIdFactory>{
