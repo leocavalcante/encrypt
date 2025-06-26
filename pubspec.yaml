@@ -15,7 +15,7 @@ dependencies:
   clock: ^1.1.1
   collection: ^1.17.0
   crypto: ^3.0.2
-  pointycastle: ^3.7.3
+  pointycastle: '>=3.7.3 <5.0.0'
 
 dev_dependencies:
   lints: ^2.0.0
